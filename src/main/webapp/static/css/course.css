@@ -1,0 +1,43 @@
+._course ul{
+	margin-left:5px;
+}
+
+._course ._chapter{
+	background-color:#4ba9e6;
+	color:#fff;
+	padding:10px;
+	font-size: 16px;
+	margin-top:5px;
+}
+
+._course ._item{
+	background-color:#f3f3f3;
+	border-left:1px solid #4ba9e6;
+	padding:10px;
+	margin-top:5px;
+	margin-left: 5px;
+}
+
+._course ._item ._status{
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}
+
+._course ._item ._undo{
+	background-image: url(../images/menuUndo.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+._course ._item ._doing{
+	background-image: url(../images/menuDoing.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+._course ._item ._done{
+	background-image: url(../images/menuDone.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+}

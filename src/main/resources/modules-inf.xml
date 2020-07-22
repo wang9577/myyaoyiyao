@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Modules>
+	<!-- 
+	<Module>
+		<name>personal-center</name>
+		<memo>个人中心模块</memo>
+	</Module>
+	<Module>
+		<name>component-message</name>
+		<memo>推送消息(WebSocket)模块</memo>
+	</Module>
+	<Module>
+		<name>component-email</name>
+		<memo>邮件收发功能</memo>
+	</Module>
+	<Module>
+		<name>component-calendar</name>
+		<memo>个人日历功能</memo>
+	</Module>
+	 -->
+</Modules>

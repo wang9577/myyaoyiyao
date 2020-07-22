@@ -1,0 +1,51 @@
+[#ftl]
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta http-equiv="content-language" content="zh">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=yes">
+	<title>教师培训</title>
+	<link href="${base}/static/frame/layui/css/layui.css" rel="stylesheet" type="text/css">
+	<link href="${base}/static/css/login.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-migrate-1.1.1.min.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/layui/layui.all.js"></script>
+	<script type="text/javascript" src="${base}/static/root/js/login.js"></script>
+</head>
+<body>
+<div class="main" role="main">
+	<div class="main_wrap">
+
+		<div class="wrap">
+			<h1><strong>用户登录</strong></h1>
+			<form id="login" name="login"  method="POST" action="${base}/login.bi" autocomplete="off">
+				<input name="option" value="credential" type="hidden">
+				<p class="username">
+					<input id="username" name="username" placeholder="登录账号" tabindex="1" type="text">
+				</p>
+				<p class="password">
+					<input id="password" name="password" placeholder="登录密码" tabindex="2" type="password">
+				</p>
+				<p id="validateCode">
+					[#include "validateCode.html"]
+				</p>
+				<p class="form_submit">
+					<input name="submit" value="登      录" tabindex="3" type="submit">
+				</p>
+				<p style="padding:11px 10px 12px; "></p>
+
+				<p class="form_submit"></p>
+				[#--
+				<div>
+					<a style="text-decoration:none;float:right;" href="javascript:void(0)" onclick="subgo(2)"><font color="white">找回密码</font></a>
+				</div>
+				--]
+
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>

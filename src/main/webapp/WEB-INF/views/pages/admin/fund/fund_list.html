@@ -1,0 +1,172 @@
+[#ftl]
+[#include "top.html"]
+<div id="${module}-content-layout" class="easyui-layout" data-options="fit:true">
+	<div data-options="region:'center',border:false,title:'韭菜管理'">
+		<!-- Begin of toolbar -->
+		<div id="${module}-toolbar">
+			<div class="frame-toolbar-button">
+				<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" id="reload${module}" plain="true">刷新</a>
+			</div>
+		</div>
+		<!-- End of toolbar -->
+		<table id="${module}-grid" toolbar="#${module}-toolbar" width="100%"></table>
+	</div>
+
+	<div data-options="region:'east',border:false,title:'基金管理' ,collapsed:true"  style="width:70%;">
+		<!-- Begin of toolbar -->
+		<div id="${module}-item-toolbar">
+			<div class="frame-toolbar-button">
+				<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-add" id="additem${module}" plain="true">添加</a>
+				<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" id="modifyitem${module}" plain="true">修改</a>
+				<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" id="removeitem${module}" plain="true">删除</a>
+				<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" id="reloaditem${module}" plain="true">刷新</a>
+			</div>
+			<form id="${module}-item-search-form">
+				<div class="frame-toolbar-search">
+					<label>基金名称：</label>
+					<input type="text"  name="prm.fundName$like" class="easyui-textbox" />
+					<button type="submit" class="easyui-linkbutton" iconCls="icon-search" style="margin-left: 10px">查询</button>
+				</div>
+			</form>
+		</div>
+		<!-- End of toolbar -->
+		<table id="${module}-item-grid" toolbar="#${module}-item-toolbar" width="100%"></table>
+	</div>
+
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="${module}-editor"></div>
+<div id="${module}-item-editor"></div>
+<div id="${module}-password"></div>
+<div id="${module}-config"></div>
+<script type="text/javascript">
+	$('#${module}-grid').datagrid({
+		url:'${base}/admin/chives/chives_list.bi',
+		rownumbers:true,
+		singleSelect:true,
+		pageSize:10,           
+		pagination:true,
+		fitColumns:false,
+		fit:true,
+		columns:[[
+			{ field:"id",checkbox:true}
+			,{ field:'code',title:'韭菜编号',width:100}
+			,{ field:'name',title:'韭菜标姓名',width:300}
+		]]
+		,onSelect:function(i,r){
+			$('#${module}-item-grid').datagrid("loadData",[]);
+			$("#${module}-content-layout").layout("expand","east");
+			$('#${module}-item-grid').datagrid("load",{"prm.chives.id":r.id});
+		}
+
+	});
+	
+	$('#${module}-item-grid').datagrid({
+		url:'${base}/admin/fund/fund_list.bi',
+		rownumbers:true,
+		singleSelect:false,
+		pageSize:20,
+		pagination:true,
+		fitColumns:false,
+		fit:true,
+		expand:false
+		,columns:[[
+			{ field:'fundCode',title:'基金编号',width:300,sortable:true}
+			,{field:'fundName',title:'基金名称',width:300}
+		]]
+
+	});
+	
+	$(function(){
+
+
+		$("#additem${module}").click(function(){
+			var items = $('#${module}-grid').datagrid('getSelections');
+			if(items.length==0){
+				$.messager.alert('警告','请选择一个韭菜','warning');
+				return ;
+			}
+			form.open({
+				target:"#${module}-item-editor"
+				,formurl:"${base}/admin/fund/fund_form.shtml?chivesId="+items[0].id
+				,grid:"#${module}-item-grid"
+			});
+		});
+
+        $("#modifyitem${module}").click(function(){
+            var items = $('#${module}-item-grid').datagrid('getSelections');
+            if(items.length==0){
+                $.messager.alert('警告','请至少选择一项','warning');
+                return ;
+            }
+            if(items.length>1){
+                $.messager.alert('警告','只能选择一项','warning');
+                return ;
+            }
+            form.open({
+                target:"#${module}-item-editor"
+                ,grid:"#${module}-item-grid"
+                ,formurl:"${base}/admin/fund/fund_form.shtml"
+                ,id:items[0].id
+                ,listUrl:"${base}/admin/fund/fund_list.bi"
+
+            });
+        });
+
+        $("#${module}-item-search-form").submit(function(){
+            var params=$(this).serializeArray();
+            var prms={};
+            $.each(params,function(idx,item){
+                prms[item.name]=item.value;
+            });
+            var row = $('#${module}-grid').datagrid('getSelected');
+            prms =$.extend(prms,{"prm.chives.id":row.id});
+            $('#${module}-item-grid').datagrid("load",prms);
+            return false;
+        });
+
+
+		$("#removeitem${module}").click(function(){
+			var items = $('#${module}-item-grid').datagrid('getSelections');
+			if(items.length==0){
+				$.messager.alert('警告','请至少选择一项','warning');
+				return ;
+			}
+			$.messager.confirm("确认","确认要删除？",function(r){
+				if(r){
+					var ids="";
+					$.each(items,function(idx,item){
+						if(idx!=0){
+							ids+=",";
+						}
+						ids+=item.id;
+					});
+					$.messager.progress({
+						msg:"正在删除，请稍后..."
+					});
+					$.post("${base}/admin/fund/fund_remove.bi",{ids:ids},function(){
+						$.messager.alert("提示","删除成功","info");
+						$("#${module}-item-grid").datagrid("reload");
+					}).always(function(){
+						$.messager.progress("close");
+					});
+				}
+			});
+		});
+
+		$("#reloaditem${module}").click(function(){
+			$("#${module}-item-grid").datagrid("reload");
+		});
+
+
+        $("#reload${module}").click(function(){
+            $("#${module}-grid").datagrid("reload");
+        });
+
+
+
+
+
+		
+	});
+</script>

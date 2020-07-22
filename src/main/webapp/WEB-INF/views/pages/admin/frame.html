@@ -1,0 +1,6 @@
+[#ftl]
+[#if jcfg.find("module.admin.sys.frameType")=="simple"]
+[#include "/pages/admin/simple.html"]
+[#elseif jcfg.find("module.admin.sys.frameType")=="normal"]
+[#include "/pages/admin/normal.html"]
+[/#if]

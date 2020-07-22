@@ -1,0 +1,133 @@
+/*-------------------------------------------------------
+ All Rights Reserved, Copyright (C) 2013, Wuyeguo, Ltd.
+-------------------------------------------------------*/
+
+body { font:12px/1.2em Microsoft YaHei;}
+
+a,
+a:link { color:#000; text-decoration:none; outline:none;}
+a:hover,
+a:focus { text-decoration:none; color:#39f;}
+
+.pd3 { padding:3px;}
+.pd5 { padding:5px;}
+.pd10 { padding:10px;}
+
+label,
+button,
+input,
+select,
+textarea {  font-size:12px; vertical-align: middle;}
+
+input,
+button,
+select,
+textarea { font:12px/1.2em Microsoft YaHei;}
+
+select,
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+input[type="radio"],
+input[type="checkbox"] { cursor: pointer;margin: 0;padding: 0;}
+
+.exam_title{
+	font-size: 1.8em;
+	color: #fff;
+	line-height: 2em;
+}
+
+
+.exam-header { height:55px; position:relative; z-index:0; overflow:hidden; border-bottom:1px #95b8e7 solid; background:url(../images/bg_header.jpg) bottom repeat-x;}
+.exam-header-left { position:absolute; z-index:1; left:15px; top:0;}
+.exam-header-left h1 { font:20px/20px Verdana; color:#fff;}
+.exam-header-right { position:absolute; z-index:1; right:5px; top:20px; color:#fff; text-align:right;}
+.exam-header-right p { line-height:0.7em;}
+.exam-header-right a, .info { color:#fff; margin:0 5px;}
+
+.exam-desc{padding:10px;}
+.exam-sort-panel{margin: 10px auto; padding: 10px;}
+.exam-sort-panel li{float:left;width:30px; height:30px;line-height: 30px; margin:3px; text-align: center;list-style: none;cursor: pointer;}
+
+.exam-main{
+	padding:15px;
+}
+.exam-content {
+	margin: 10px 20px;
+	padding: 10px;
+	font-size: 13px;
+	border: 1px solid #ddd;
+}
+
+.exam-option input:checked .exam-option-item{
+	color:#ff8080 !important;
+}
+
+.flex-container {
+	display: flex;
+	display: -webkit-flex;
+	align-items: flex-start;
+}
+
+.exam-num {
+	text-align: center;
+	padding: 2px 5px;
+	font-size: 16px;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+.exam-question-title {
+	font-weight: bold;
+	font-size: 16px;
+	line-height:30px;
+}
+
+.exam-question-detail{
+	margin-left: 10px;
+}
+
+.exam-option {
+	margin: 10px 5px;
+	padding: 0;
+}
+
+.exam-option li {
+	margin-left: 20px;
+	list-style: none;
+	line-height: 30px;
+}
+
+.exam-option li label{
+	font-size:16px;
+	font-weight: 200;
+}
+
+.exam-option li label.selected{
+	font-size:16px;
+	font-weight: bold;
+	color: #ff8080;
+}
+
+.exam-option li label .code{
+	margin-left:10px;
+}
+
+.exam-option-item {
+	margin-left: 10px;
+}
+
+
+
+._flex{
+	display:flex;
+	flex-direction: row;
+}
+
+
+.bg-danger {background-color: #ff8080;color:#fff;}
+
+.exam-footer {padding:5px; text-align:center; overflow:hidden; background:#e0ecff;}
+
+

@@ -1,0 +1,116 @@
+[#ftl]
+[#assign chives = (jdao.hql("from Chives where id=?",[Session ["id"] ])()[0])!{} /]
+[#if chives.id??]
+[#global initFund=jcus.initFund(chives.id!)]
+
+[#else]
+[#global initFund={}]
+[/#if]
+
+
+<html lang="zh">
+<head>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>摇一摇</title>
+    <link href="${base}/static/frame/weui/css/weui.css" rel="stylesheet" type="text/css">
+    <link href="${base}/static/frame/weui/css/weuix.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="${base}/static/frame/weui/js/zepto.min.js"></script>
+    <script type="text/javascript" src="${base}/static/frame/weui/js/zepto.weui.js"></script>
+
+</head>
+
+<body>
+<div class="weui-btn_warn weui-header ">
+    <h1 class="weui-header-title">韭菜:${chives.name!}</h1>
+    <div class="weui-header-right loginOut">退出登录</div>
+</div>
+
+<div class="page-hd" style="text-align: center">
+        您今天的中奖鸡是:
+</div>
+<div  style="text-align: center" class="dayFund">
+    ${initFund.content!}
+</div>
+<div class="weui-btn-area">
+    <button class="weui-btn weui-btn_primary goYaoyiyao"  href="javascript:" [#if initFund.id??] style=" background-color:gray;"  disabled [#else]  style=" background-color:red;" [/#if]>开摇</button>
+</div>
+<div>
+    您的基金:
+</div>
+<table>
+    <thead>
+    <tr><th>基金代码</th><th>基金代码</th></tr>
+    </thead>
+    <tbody >
+    [@jdao.hql("from ChivesFund where chives.id = ? order by fundCode ",[chives.id!]) var="fund"]
+
+    <tr><td title="基金代码">${fund.fundCode!}</td><td title="基金代码">${fund.fundName!}</td></tr>
+    [/@]
+    </tbody>
+</table>
+
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        var chivesId = '${chives.id!}';
+        if(chivesId==null ||  chivesId==''){
+            location.href="${base}/chices/login/login.shtml"
+        }
+        $('.goYaoyiyao').click(function () {
+            var chivesId = '${chives.id!}';
+            $.confirm("您确定开始摇一摇吗?", "提示", function() {
+                $.ajax({
+                    type: "POST",
+                    url:"${base}/yaoyiyao/goYaoyiyao.bi",
+                    timeout : 6000,
+                    data: {"chivesId":chivesId},//参数*/
+                    dataType: "json",
+                    success:function (data) {
+                        console.log(data);
+                       if(data.status){
+                           $.toast("成功", "success");
+                            $('.dayFund').html(data.content);
+                           $('.goYaoyiyao').css({'background-color' : 'gray'});
+
+                           $('.goYaoyiyao').attr("disabled", true);
+                       }else {
+                           $.toast(data.msg, "forbidden");
+                       }
+                    },error:function (data) {
+
+                    }
+                });
+            }, function() {
+                //取消操作
+            });
+        });
+        $('.loginOut').click(function () {
+            $.confirm("您确定退出登录吗?", "提示", function() {
+                $.ajax({
+                    type: "POST",
+                    url:"${base}/yaoyiyao/loginOut.bi",
+                    timeout : 6000,
+                    dataType: "json",
+                    success:function (data) {
+                        if(data.status){
+                            location.href="${base}/chices/login/login.shtml"
+                        }
+                    },error:function (data) {
+
+                    }
+                });
+            }, function() {
+                //取消操作
+            });
+        });
+
+    });
+
+</script>
+</body>
+</html>

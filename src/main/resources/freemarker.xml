@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+    
+    
+    
+    
+    <bean id="freemarkerResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	 	<property name="suffix" value=".html"/>
+	  <property name="exposeSpringMacroHelpers" value="true"/>
+	  <property name="contentType" value="text/html; charset=UTF-8"/>
+	  <property name="requestContextAttribute" value="request"/>
+	  <property name="viewClass">
+	    <value>org.ustudy.core.web.views.ViewInitView</value>
+	  </property>
+	</bean>
+    <bean id="jsResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	 	<property name="suffix" value=".jsx"/>
+	  <property name="exposeSpringMacroHelpers" value="true"/>
+	  <property name="contentType" value="application/x-javascript"/>
+	  <property name="requestContextAttribute" value="request"/>
+	  <property name="viewClass">
+	    <value>org.ustudy.core.web.views.ViewInitView</value>
+	  </property>
+	</bean>
+	
+	
+    <bean id="excelResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	 	<property name="suffix" value=".xml"/>
+	  <property name="exposeSpringMacroHelpers" value="true"/>
+	  <property name="contentType" value="application/vnd.ms-excel; charset=UTF-8"/>
+	  <property name="requestContextAttribute" value="request"/>
+	  <property name="viewClass">
+	    <value>org.ustudy.core.web.views.ViewInitView</value>
+	  </property>
+	</bean>
+	
+	<bean id="ftlprops" class="org.springframework.beans.factory.config.YamlPropertiesFactoryBean">
+		<property name="resources">
+			<value>classpath:/freemarker.yml</value>
+		</property>
+	</bean>
+	
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPaths">
+			<array>
+				<value>/</value>
+				<value>classpath:/META-INF</value>
+				<value>/WEB-INF/views/</value>
+				<value>/WEB-INF/fviews/</value>
+				<value>/WEB-INF/includes/</value>
+				<value>/WEB-INF/layouts/</value>
+			</array>
+		</property>
+		
+		
+		<property name="postTemplateLoaders">
+			<array>
+			<!-- 
+				<ref bean="databaseKeyTemplateLoader"/>
+				<ref bean="fileSystemTemplateLoader"/>
+				<ref bean="databaseUrlTemplateLoader"/>
+				-->
+				<ref bean="resourceTemplateLoader"/>
+				<ref bean="fileSystemTemplateLoader"></ref>
+			</array>
+		</property>
+		 
+		<property name="preTemplateLoaders">
+			<array>
+			</array>
+		</property>
+		 
+		<property name="freemarkerVariables" ref="directives"/>
+		<property name="freemarkerSettings">
+			<ref bean="ftlprops"/>
+		</property>
+	</bean>
+</beans>

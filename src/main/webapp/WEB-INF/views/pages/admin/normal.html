@@ -1,0 +1,129 @@
+[#ftl]
+<!DOCTYPE html>
+<html class="panel-fit">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>${jcfg.find("module.admin.sys.name")}</title>
+	<link rel="stylesheet" type="text/css" href="${base}/static/frame/FontAwesomemaster/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/easyui/1.6.10/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/easyui/1.6.10/themes/icon.css" />
+	<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/css/icon.css" />
+	<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+	<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/css/frame.css" />
+	<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/easyui/easyui/1.6.10/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/easyui/easyui/extention/datagrid-detailview.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/easyui/easyui/1.6.10/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/easyui/easyui/extention/jquery.easyui.validtype.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.all.min.js"></script>
+	<script type="text/javascript" src="${base}/static/frame/ueditor/lang/zh-cn/zh-cn.js"></script>
+	<script type="text/javascript" src="${base}/static/root/js/frame.js"></script>
+	<script src="${base}/static/frame/layui/layui.all.js" charset="utf-8"></script>
+	<link  rel="shortcut icon" href="${base}/static/images/icons.png">
+	<link rel="stylesheet" href="${base}/static/frame/uploader/css/jquery.dm-uploader.min.css">
+	<script type="text/javascript" src="${base}/static/frame/uploader/js/jquery.dm-uploader.min.js"></script>
+	
+</head>
+
+<body class="easyui-layout">
+	<!-- begin of header -->
+	<div class="_header" data-options="region:'north',border:false,split:true">
+		<div class="_header_top">
+			<div class="_header-left">
+				<img src="${jcfg.find('module.admin.sys.logo')}" style="margin-top:10px;" />
+			</div>
+			<div class="_header-right pd3 _flex">
+				[#global menus=jsec.userMenus()]
+				<a href="javaScript:void(0)" id="menu_home" data-link="${base}/admin/home.shtml"
+					class="nav cur leaf root_menu">
+					<img src="${base}/static/images/icons/home.png" height="32" />
+					<p>&nbsp;&nbsp;首&nbsp;&nbsp;&nbsp;&nbsp;页&nbsp;&nbsp;</p>
+				</a>
+				[#list menus.keySet() as key]
+				<a href="javaScript:void(0)" data="${menus[key].property.id}" data-link="${menus[key].property.url!}" class="nav root_menu ${menus[key].property.leaf?then('leaf','')}">
+					<img src="${base}/static/images/icons/${menus[key].property.icon}.png" height="32" />
+					<p>${menus[key].property.name}</p>
+				</a>
+				[/#list]
+			</div>
+		</div>
+		<div class="_header_bottom pd3 f12 blue _flex">
+			<div style="width:80%;">
+				<span class="ml5"><img src="${base}/static/images/340.gif" width="12" height="12"></span>
+				[#global user=jsec.user()]
+				<span class="ml5"><strong>用户名：${user.code!"0000"}</strong></span>
+				<span class="ml10"><strong>姓名：</strong>${user.name}</span>
+				[#--
+				<span class="ml10"><strong>教学单位：</strong>研究生院</span>
+				--]
+				<span class="ml10"><strong>登录时间：</strong>
+					[@jdao.hql("from UserLoginLogs order by loginTime desc",[],[1]) var="loginTime" loop=false]
+					${jdata.date(loginTime[0].loginTime)?string("yyyy-MM-dd HH:mm:ss")}
+					[/@]
+				</span>
+			</div>
+			<div style="width:20%;text-align: right;">
+				<a href="${base}/" class="ml5" target="_blank">网站首页</a><span class="ml5">|</span>
+				<a href="javascript:void(0)" id="root_change_password" class="ml5">修改密码</a><span class="ml5">|</span>
+				<a href="javascript:void(0)" id="system_logout" class="mr10">安全退出</a>
+				<script type="text/javascript">
+					$(function () {
+						$("#system_logout").click(function () {
+							$.messager.confirm("退出", "是否退出系统？", function (r) {
+								if (r) {
+									window.location = "${base}/logout.bi";
+								}
+							});
+						});
+						$("#root_change_password").click(function () {
+							form.open({
+								target: "#root_change_password_panel"
+								, formurl: "${base}/admin/basic/change_password/change_password.shtml"
+							});
+
+						});
+					});
+				</script>
+				<div id="root_change_password_panel"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div data-options="region:'center',border:false"></div>
+
+	<div class="_footer" data-options="region:'south',split:true,height:30">
+		${jcfg.find("module.admin.sys.footer")}
+	</div>
+	<script type="text/javascript">
+		$(function () {
+
+			$('.root_menu').click(function () {
+				if ($(this).hasClass("leaf")) {
+					var title = $(this).text();
+					var url = $(this).attr('data-link');
+					$("body").layout("remove", "center");
+					$("body").layout("add", {
+						region: "center"
+						, border: false
+						, href: url
+					});
+				}else{
+					$("body").layout("remove", "center");
+					$("body").layout("add", {
+						region: "center"
+						, border: false
+						, href: "${base}/admin/main.shtml?m="+$(this).attr("data")
+					});
+				}
+				$(".root_menu").removeClass("cur");
+				$(this).addClass("cur");
+			});
+			$("#menu_home").trigger("click");
+		});
+	</script>
+</body>
+
+</html>

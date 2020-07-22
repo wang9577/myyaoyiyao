@@ -1,0 +1,66 @@
+@charset "utf-8";
+html,body{
+	height: 100%;
+}
+body{ font-family:"Microsoft Yahei",Tahoma,Arial,Helvetica,STHeiti; font-size:14px;}
+
+.course-header {
+	background-color: #f8f8f8;
+	padding: 10px 0;
+	border-bottom: 1px solid #ddd;
+}
+
+/* ._left_side{
+	position: fixed;
+	left:10px;
+	top:10px;
+	background-color: #f9fafc;
+	height:100%;
+	border: 1px solid #d2d6de;
+}
+
+._left_side ._menu_item{
+	padding: 10px;
+	text-align: center;
+	border-bottom: 1px solid #d2d6de;
+}
+
+._left_side ._menu_item.cur{
+	background-color: #CAE1FF;
+	
+}
+
+._left_side ._menu_item:hover{
+	background-color: #CAE1FF;
+}
+
+
+._left_side ._menu_item a{
+	color: #666;
+} */
+
+._bottom_site{
+	position: fixed;
+	margin:auto; 
+	right:2%;
+	bottom:2%;
+	width:400px; 
+	height:40px;
+	cursor: pointer;
+}
+
+._main_content{
+	padding: 5px;
+	margin: 0 auto;
+}
+
+._exam_num{
+	display:inline-block;
+	width:20px;
+	text-align:center;
+}
+
+table.question{
+	border-collapse:separate; 
+	border-spacing:10px;
+}

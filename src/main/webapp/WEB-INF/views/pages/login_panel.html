@@ -1,0 +1,145 @@
+[#ftl]
+<div class="main_wrap_index" id="account_login_panel">
+    <div class="wrap">
+        <img alt="" src="${base}/static/images/logo.png" style="margin:30px auto;">
+        <h1><strong>课 程 中 心</strong></h1>
+        <form id="login" name="login" method="POST" action="${base}/login.bi" autocomplete="off">
+            <input name="option" value="credential" type="hidden">
+            <p class="username">
+                <input id="username" name="username" placeholder="学工号" tabindex="1" type="text">
+            </p>
+            <p class="password">
+                <input id="password" name="password" placeholder="登录密码" tabindex="2" type="password">
+            </p>
+            <p id="validcode_body">
+                [#include "validateCode.html"]
+            </p>
+            <p class="form_submit">
+                <input value="登    录" tabindex="4" type="submit">
+                
+            </p>
+            [#--
+            <p style="padding-top: 15px;padding-bottom: 15px;"><a style="float: right;" href="${base}/sso/login.bi">统一身份认证</a></p>
+            
+            <p class="form_register">
+                <a tabindex="4" id="to_sign_up_panel" class="_color999" href="javaScript:void(0)"
+                    type="button">校外学生注册账号</a>
+            </p>
+            
+            <div class="help">
+                <p>咨询电话：021-51322225</p>
+                <p>咨询邮箱：***********@shutcm.edu.cn</p>
+            </div>
+            --]
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var dia = $("#account_login_panel").parent();
+        $(dia).find("#to_sign_up_panel").click(function () {
+            var load = layer.load();
+            $.get("${base}/register_panel.shtml", function (h) {
+                $(dia).html(h);
+                $("#register").submit(function () {
+                    if (!$("#code").val()) {
+                        layer.tips("请输入用户名", "#code", {
+                            tips: [2, "red"]
+                        });
+                        return false;
+                    }
+                    if (!$("#name").val()) {
+                        layer.tips("请输入你的姓名", "#name", {
+                            tips: [2, "red"]
+                        });
+                        return false;
+                    }
+                    if (!$("#password").val()) {
+                        layer.tips("请输入密码", "#password", {
+                            tips: [2, "red"]
+                        });
+                        return false;
+                    }
+                    if ($("#password").val() != $("#confirmPassword").val()) {
+                        layer.tips("确认密码与原密码不一致", "#confirmPassword", {
+                            tips: [2, "red"]
+                        });
+                        return false;
+                    }
+                    var load = layer.load();
+                    $.post($(this).attr("action"), $(this).serialize(),
+                        function (res) {
+                            if (res.status) {
+                                layer.closeAll();
+                                layer.msg(res.msg, {
+                                    icon: 6
+                                });
+                            } else {
+                                layer.msg(res.msg, {
+                                    icon: 5
+                                });
+                            }
+                        },
+                        "json"
+                    ).fail(function () {
+                        layer.msg("用户名或密码错误", {
+                            icon: 5
+                        });
+                    }).always(function () {
+                        layer.close(load);
+                    });
+                    return false;
+                });
+            }).always(function (e) {
+                layer.close(load);
+            });
+        });
+        dia.find("#login").submit(function () {
+            if (!$("#username").val()) {
+                layer.tips("请输入用户名", "#username", {
+                    tips: [2, "red"]
+                });
+                return false;
+            }
+            if (!$("#password").val()) {
+                layer.tips("请输入密码", "#password", {
+                    tips: [2, "red"]
+                });
+                return false;
+            }
+            if ($("#validcodeinput").length) {
+                if (!$("#validcodeinput").val()) {
+                    layer.tips("请输入验证码", "#validcodeinput", {
+                        tips: [2, "red"]
+                    });
+                    return false;
+                }
+            }
+            var load = layer.load();
+            $.post($(this).attr("action"), $(this).serialize(),
+                function (res) {
+                    if (res.status == "success") {
+                        //layer.alert("各位同学，课程中心正在建设，请于2月27日起登陆查阅课程信息，敬请期待！",{icon:6},function(){
+                            window.location.href="${base}"+res.url;
+                        //});
+                    } else {
+                        layer.msg(res.msg, {
+                            icon: 5
+                        });
+                        if (res.validcode) {
+                            $("#validcode_body").load("/validateCode.shtml")
+                        }
+                    }
+                },
+                "json"
+            ).fail(function () {
+                layer.msg("用户名或密码错误", {
+                    icon: 5
+                });
+            }).always(function () {
+                layer.close(load);
+            });
+            return false;
+        });
+    });
+</script>

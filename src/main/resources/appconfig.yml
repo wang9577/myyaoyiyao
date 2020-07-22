@@ -1,0 +1,132 @@
+#数据库连接
+jdbc:
+  connection:
+    dbname: "mariadb" #数据库名称
+    version: "10" #数据库版本
+    driver: "${p-db-driver}" #数据库驱动
+    url: "${p-db-url}" #数据库连接字符串
+    username: "${p-db-user}" #数据库连接用户名
+    password: "${p-db-passwd}" #数据库连接密码
+    storage_engine: innodb
+#连接池配置
+  pool:
+    minIdle: 3 #连接池最小大小
+    maxActive: 200 #数据库最大连接数
+    maxWait: 600000 #数据库最大等待时间
+    timeBetweenEvictionRunsMillis: 600000 
+    minEvictableIdleTimeMillis: 300000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    validationQuery: "select count(1) from SYS_USER " #链接测试
+    
+#hibernate配置信息
+hibernate:
+  scan:
+    packages: "org.ustudy.core,org.ustudy.entity,com.ustudy.entity,com.ustudy.entity.basic,com.ustudy.entity.investigation"
+  sql:
+    show_sql: "false" #sql显示测试
+    format_sql: "false" #sql格式化显示
+    dialect: "${p-dialect}" #方言
+    hbm2ddl:
+      auto: none #自动生成表结构语句
+#缓存设置
+  ehcache: 
+    configFileHiberante: "cache/ehcache-hibernate-local.xml"
+    configFile: "cache/ehcache-local.xml"
+#系统全局变量
+web:
+  domain: "study.shutcm.edu.cn"
+  resources_domain: "video.shutcm.edu.cn"
+  baseUrl: "http://localhost"
+  stream:
+    maxUploadSize: 50485760 #上传文件大小
+  auth:
+    stuMaxLogin: "100"
+    valicode: 
+      used: true
+      usecount: 1
+      bgColor: "#414749"
+      textColor: "light" #dark light
+    single: false
+    admin:
+    - "^/admin/.*$"
+    login:
+    - "^/student/.*$"
+    - "^/teacher/.*$"
+    - "^/m/student/.*$"
+    - "^/project/.*$"
+    url:
+      student: "/student/home.shtml"
+      teacher: "/teacher/home.shtml"
+      admin: "/admin/frame.shtml"
+      project: "/project/project.shtml"
+      mobile: "/m/student/mycourses.shtml"
+
+resources:
+  files:
+    upload: "/service/resources/upload" #业务模块上传文件保存目录
+    images: "/service/resources/images" #内置业务图片文件保存目录
+    ueditor: "/service/resources/ueditor" #富文本编辑器上传文件保存目录
+    pages: "/service/resources/pages" #外置freemarker文件保存目录
+    tmp: "/service/resources/temp" #系统生成临时文件保存目录
+    logs: "/service/resources/logs" #系统生成临时文件保存目录
+logs:
+  db:
+    open: true #是否打开数据库操作记录日志
+  request:
+    open: true #是否打开请求操作日志记录
+    urls:  #监听url
+    - "^.*\\.bi$"
+    - "^.*\\.shtml$"
+module:
+  study:
+    connect:
+      host: "localhost"
+  ftp:
+    open: "false"
+    port: "21"
+  pages:
+    index: "/index.shtml"
+    help: "/help.shtml"
+  admin:
+    sys:
+      name: "摇一摇"
+      logo: "/static/images/logo.png"
+      frameType: "normal" #simple简单框架 normal普通框架
+      footer: "&copy; 摇一摇"
+  course:
+    content:
+      play_url: "http://localhost/upload"
+      type:
+        video:
+          code: "1"
+          exts: 
+            - "mp4"
+        html:
+          code: "2"
+          exts: 
+            - "html"
+            - "txt"
+            - "md"
+            - "log"
+            - "xml"
+            - "json"
+            - "js"
+        doc:
+          code: 3
+          exts: 
+            - "doc"
+            - "docx"
+            - "xls"
+            - "xlsx"
+            - "ppt"
+            - "pptx"
+            - "pdf"
+        image:
+          code: 4
+          exts:
+            - "jpg"
+            - "jpeg"
+            - "png"
+            - "gif"        

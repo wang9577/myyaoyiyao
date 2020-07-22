@@ -1,0 +1,256 @@
+[#ftl]
+
+[#macro home_css]
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap-theme.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/layui/css/layui-admin.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/FontAwesomemaster/css/font-awesome.min.css">
+<link rel="stylesheet" href="${base}/static/css/common.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/home.css" media="all">
+[/#macro]
+
+[#macro home_js]
+<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/jquery/jquery-validation/dist/jquery.validate.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/jquery/jquery-validation/dist/additional-methods.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="${base}/static/frame/layui/layui.all.js" charset="utf-8"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.box.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.pagesload.js"></script>
+<script type="text/javascript" src="${base}/static/frame/eschecker/eschecker.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/browser.js"></script>
+[/#macro]
+
+[#macro layui_all]
+<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+<script src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+<script src="${base}/static/frame/layui/layui.all.js" charset="utf-8"></script>
+[/#macro]
+
+[#macro main_project]
+<div class="header navbar">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img src="${base}/static/images/logo.png" width="250"/>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+        	<ul class="nav navbar-nav">
+				<li class="${(jweb.pathInfo().viewName=='project')?then('active','')}"><a href="${base}/project/project.shtml">管理首页</a></li>
+			</ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${userInfo.name!} 
+                    	<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a id="signout" href="javascript:void(0)">退出系统</a></li>
+					</ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#signout").click(function(e) {
+            layer.confirm("是否退出系统?", function(r) {
+                if (r) {
+                    $.get("${base}/logout.bi", function(e) {
+                        window.location.href = "${base}/login.htm";
+                    });
+                }
+            });
+        });
+        $("#modifyPassword").click(function () {
+            var loadidx = layer.load();
+            $.get("${base}/teacher/change_password.shtml", function (h) {
+                var diaidx = layer.open({
+                    content: h
+                    , type: 1
+                    , closeBtn: 0
+                    , shadeClose: true
+                    , title: "修改密码"
+                    , btn: ["提交", "取消"]
+                    , yes: function (i,h) {
+                        var $form=h.find("form");
+                        if(!$form.find("input[name='password']").val()){
+                            layer.msg("请输入原始密码！",{icon:5});
+                            return false;
+                        }
+                        if(!$form.find("input[name='newPassword']").val()){
+                            layer.msg("请输入新密码！",{icon:5});
+                            return false;
+                        }
+                        if($form.find("input[name='newPassword']").val()!=$form.find("input[name='confirmPassword']").val()){
+                            layer.msg("两次输入密码不一致！",{icon:5});
+                            return false;
+                        }
+                        var loadidx=layer.load();
+                        $.post("${base}/protected/login_user/change_password.bi",$form.serialize(),function(res){
+                            if(res.status){
+                                layer.msg(res.msg,{icon:6});
+                                layer.close(diaidx)
+                            }else{
+                                layer.msg(res.msg,{icon:5});
+                            }
+                        }).always(function(){
+                            layer.close(loadidx);
+                        });
+                        return false;
+                    }
+                });
+                layer.close(loadidx);
+            });
+        });
+    });
+</script>
+
+[/#macro]
+
+[#macro project_main]
+<div class="layui-col-md2">
+    <div class="widget">
+        <div class="_header _bg"><span class="_title1">项目设置</span></div>
+        <div class="_body manageGo">
+            <ul class="side-menu">
+                <li class="${(jweb.pathInfo().viewName=='manage')?then('cur','')}"><a href="${base}/project/manage/manage.shtml?projectId=${project.id!}">阶段设置</a></li>
+                <li class="${(jweb.pathInfo().viewName=='assess')?then('cur','')}"><a href="${base}/project/manage/assess/assess.shtml?projectId=${project.id!}">考核设置</a></li>
+                <li class="${(jweb.pathInfo().viewName=='workshop')?then('cur','')}"><a href="${base}/project/manage/workshop/workshop.shtml?projectId=${project.id!}">工作坊管理</a></li>
+                <li class="${(jweb.pathInfo().viewName=='taskset')?then('cur','')}"><a href="${base}/project/manage/taskset/taskset.shtml?projectId=${project.id!}">作品集管理</a></li>
+                <li class="${(jweb.pathInfo().viewName=='expert')?then('cur','')}"><a href="${base}/project/manage/expert/expert.shtml?projectId=${project.id!}">专家管理</a></li>
+                <li class="${(jweb.pathInfo().viewName=='student')?then('cur','')}"><a href="${base}/project/manage/student/student.shtml?projectId=${project.id!}">学员管理</a></li>
+                <li class="${(jweb.pathInfo().viewName=='notice')?then('cur','')}"><a href="${base}/project/manage/notice/notice.shtml?projectId=${project.id!}">内容发布</a></li>
+                <li class="${(jweb.pathInfo().viewName=='answer')?then('cur','')}"><a href="${base}/project/manage/answer/answer.shtml?projectId=${project.id!}">专家答疑</a></li>
+                <li class="${(jweb.pathInfo().viewName=='user')?then('cur','')}"><a href="${base}/project/manage/user/user.shtml?projectId=${project.id!}">项目管理员</a></li>
+                <li><a href="">缴费记录</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+[/#macro]
+
+[#macro workshop_left]
+<div class="widget">
+    <div class="_header _bd"><span class="_title1">管理中心</span></div>
+    <div class="_body">
+        <ul class="side-menu">
+            <li class="${(jweb.pathInfo().viewName=='manage')?then('cur','')}"><a href="${base}/teacher/tutor/manage/manage.shtml?workshopId=${workshop.id!}">基本信息设置</a></li>
+            <li class="${(jweb.pathInfo().viewName=='student')?then('cur','')}"><a href="${base}/teacher/tutor/manage/student/student.shtml?workshopId=${workshop.id!}">成员管理</a></li>
+            <li class="${(jweb.pathInfo().viewName=='notice')?then('cur','')}"><a href="${base}/teacher/tutor/manage/notice/notice.shtml?workshopId=${workshop.id!}">通知公告</a></li>
+            <li class="${(jweb.pathInfo().viewName=='briefing')?then('cur','')}"><a href="${base}/teacher/tutor/manage/briefing/briefing.shtml?workshopId=${workshop.id!}">班级简报</a></li>
+            <li class="${(jweb.pathInfo().viewName=='task')?then('cur','')}"><a href="${base}/teacher/tutor/manage/task/task.shtml?workshopId=${workshop.id!}">批改作业</a></li>
+            <li class="${(jweb.pathInfo().viewName=='workshop')?then('cur','')}"><a href="${base}/project/manage/workshop/workshop.shtml">班级活动</a></li>
+            <li class="${(jweb.pathInfo().viewName=='answer')?then('cur','')}"><a href="${base}/teacher/tutor/manage/answer/answer.shtml?workshopId=${workshop.id!}">问答管理</a></li>
+            <li class="${(jweb.pathInfo().viewName=='topic')?then('cur','')}"><a href="${base}/teacher/tutor/manage/topic/topic.shtml?workshopId=${workshop.id!}">话题管理</a></li>
+            <li class="${(jweb.pathInfo().viewName=='resources')?then('cur','')}"><a href="${base}/teacher/tutor/manage/resources/resources.shtml?workshopId=${workshop.id!}">共享资源</a></li>
+            <li class="${(jweb.pathInfo().viewName=='taskset')?then('cur','')}"><a href="${base}/teacher/tutor/manage/taskset/taskset.shtml?workshopId=${workshop.id!}">作品集</a></li>
+            <li class="${(jweb.pathInfo().viewName=='study')?then('cur','')}"><a href="${base}/teacher/tutor/manage/study/study.shtml?workshopId=${workshop.id!}">班级详情</a></li>
+
+        </ul>
+    </div>
+</div>
+[/#macro]
+
+
+[#macro workshop_head]
+<div class="layui-col-md2">
+    <div class="banner-logo">
+        [#if workshop.logo??]
+
+        <img  src="${base}/datas/load/PathFile/${workshop.logo}"/>
+
+        [#else]
+        <img src="${base}/static/images/wglogo.png"/>
+        [/#if]
+    </div>
+</div>
+<div class="layui-col-md10">
+    <div class="info">
+        <h3 id="title">${workshop.name!}</h3>
+        <p class="sub-title">
+            <b>学段学科：</b><span>小学&gt;语文</span><b class="_ml20">辅导老师：</b>
+            <span title="">
+							[#assign hostList = (jdao.hql("from ProjectWorkshopTeacher where projectWorkshop.id=? and  identity = 'HOST'",[workshop.id!])())![] /]
+									[#list hostList as host]
+									[#if host_index gt 0]
+									,
+									[/#if]
+									${(host.teacher.name)!}
+									[/#list]
+						</span>
+        </p>
+        <p class="desc">
+            <b>简介：</b>
+            <span id="wgDes">${workshop.detail!}</span>
+        </p>
+    </div>
+</div>
+[/#macro]
+
+[#macro footer]
+<div class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="col-md-8">
+                <h3>联系我们</h3>
+                <div class="footer-content">
+                    <ul>
+                        <li>业务咨询热线：023-68252195</li>
+                        <li>技术咨询热线：021-66830655</li>
+                        <li>邮编：400715</li>
+                        <li>地址：重庆市北碚区天生路2号西南大学网络与继续教育学院</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-4 _right">
+                <p>微信扫一扫学习</p>
+                <p><img alt="" src="${base}/static/images/qrcode.png"></p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fuild">
+        <div class="container">
+            <div class="copyright">
+                <span>
+                    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=50010902000241" style="color:#fff;display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+                        <img src="${base}/static/images/police.png" style="float:left;">
+                        渝公网安备：50010902000241号&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </span>
+                <span>版权所有：西南大学网络与继续教育学院</span>
+                <span><a href="http://beian.miit.gov.cn" target="_blank" style="text-decoration: none;color: #fff;">渝ICP备06005063号-2</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+[/#macro]
+
+[#macro easyui]
+<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/easyui/1.6.10/themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/easyui/1.6.10/themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/css/icon.css" />
+
+<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/easyui/easyui/1.6.10/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/easyui/easyui/extention/datagrid-detailview.js"></script>
+<script type="text/javascript" src="${base}/static/frame/easyui/easyui/1.6.10/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${base}/static/frame/easyui/easyui/extention/jquery.easyui.validtype.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="${base}/static/frame/eschecker/eschecker.js"></script>
+<script src="${base}/static/root/js/browser.js"></script>
+<style>
+    .form_table td {
+        padding: 5px;
+    }
+</style>
+[/#macro]

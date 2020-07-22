@@ -1,0 +1,95 @@
+[#ftl]
+[#global menus=jsec.userMenus()[jweb.pathName("m")]]
+[#macro submenus parent root=false]
+<ul class="[#if root] frame-side-tree[/#if] ">
+    [#if parent.property.leaf]
+    <li iconCls="${parent.property.icon}" data-options="attributes:{url:'${parent.property.url}',id:'${parent.property.id}',icon:'${parent.property.icon}',name:'${parent.property.name}'}">
+        <a href="javascript:void(0)" data-icon="${parent.property.icon}" data-link="${parent.property.url}"
+            iframe="0">${parent.property.name}</a>
+    </li>
+    [#else]
+    [#list parent.keySet() as key]
+    [#if key!="perms"&&key!="property"]
+    <li iconCls="${parent[key].property.icon}" data-options="attributes:{url:'${parent[key].property.url}',id:'${parent[key].property.id}',icon:'${parent[key].property.icon}',name:'${parent[key].property.name}'}">
+        [#if parent[key].property.leaf]
+        <a href="javascript:void(0)" data-icon="${parent[key].property.icon}" data-link="${parent[key].property.url}"
+            iframe="0">${parent[key].property.name}</a>
+        [#else]
+        <span>
+            ${parent[key].property.name}
+        </span>
+        [/#if]
+        [#if !parent[key].property.leaf]
+        [@submenus parent=parent[key] /]
+        [/#if]
+    </li>
+    [/#if]
+    [/#list]
+    [/#if]
+
+</ul>
+[/#macro]
+<div id="main_body_layout" class="easyui-layout" data-options="{fit:true,border:false}">
+    <div class="frame-sidebar" data-options="region:'west',width:'200px',split:true,title:'导航菜单'">
+        <div class="easyui-accordion" data-options="fit:true,border:false">
+
+            [#list menus.keySet() as key]
+            [#if key!="perms"&&key!="property"]
+            <div title="${menus[key].property.name}" data-options="iconCls:'${menus[key].property.icon}'"
+                style="padding:5px;">
+                [@submenus parent=menus[key] root=true /]
+            </div>
+            [/#if]
+            [/#list]
+
+        </div>
+    </div>
+
+    <div class="_main" data-options="region:'center',border:false">
+        <div id="frame-tabs" class="easyui-tabs" data-options="fit:true">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.frame-side-tree').tree({
+            onSelect: function (r) {
+                console.log(r.attributes);
+                var title = r.attributes.name;
+                var url =r.attributes.url;
+                var iconCls = r.attributes.icon;
+                var iframe = false;
+                addTab(title, url, iconCls, iframe);
+            }
+        });
+    });
+    function addTab(title, href, iconCls, iframe) {
+			var tabPanel = $('#frame-tabs');
+			if (!tabPanel.tabs('exists', title)) {
+				var content = '<iframe scrolling="auto" frameborder="0"  src="' + href + '" style="width:100%;height:100%;"></iframe>';
+				if (iframe) {
+					tabPanel.tabs('add', {
+						title: title,
+						content: content,
+						iconCls: iconCls,
+						fit: true,
+						cls: 'pd3',
+						closable: true
+					});
+				}
+				else {
+					tabPanel.tabs('add', {
+						title: title,
+						href: href,
+						iconCls: iconCls,
+						fit: true,
+						cls: 'pd3',
+						closable: true
+					});
+				}
+			}
+			else {
+				tabPanel.tabs('select', title);
+			}
+		}
+</script>

@@ -1,0 +1,21 @@
+[#ftl]
+
+[#function course_logo course w=0 h=160]
+  [#if jstr.isBlank(course.logo)]
+    [#return "/static/images/zwtp.jpg"]
+  [#else]
+    [#assign photo=course.logo?eval]
+    [#if photo.type=="builtin"][#return "/resource/cover/${photo.code}/${w}/${h}"]
+    [#else][#return "/datas/thumb/PathFile/${photo.id}/${w}/${h}"][/#if]
+  [/#if]
+[/#function]
+
+精品课程：<br/>
+[#list courses as course]
+<div class="_mt10">
+<a target='_blank' href='/site/course/package.shtml?course_id=${course.id}'>
+<img src="${course_logo(course)}" width="100%" height="160">
+<p>${course.name!}</p>
+</a>
+</div>
+[/#list]

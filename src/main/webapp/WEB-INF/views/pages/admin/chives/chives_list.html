@@ -1,0 +1,149 @@
+[#ftl]
+[#include "top.html"]
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'center',border:false">
+    	<!-- Begin of toolbar -->
+        <div id="${module}-toolbar">
+            <div class="frame-toolbar-button">
+                <a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-add" id="add${module}" plain="true">添加</a>
+                <a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" id="modify${module}" plain="true">修改</a>
+                <a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-key" id="modifyPassword${module}" plain="true">修改密码</a>
+                <!--<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-user" id="openCode${module}" plain="true">激活账号</a>-->
+                <a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" id="reload${module}" plain="true">刷新</a>
+            	<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" id="remove${module}" plain="true">删除</a>
+            </div>
+            <form id="${module}-search-form">
+	            <div class="frame-toolbar-search">
+	                <label>编号：</label><input class="easyui-textbox" name="prm.code$like" style="width:100px">
+	                <label>名称：</label><input class="easyui-textbox" name="prm.name$like" style="width:100px">
+	                <button type="submit" class="easyui-linkbutton" iconCls="icon-search">开始检索</button>
+	            </div>
+            </form>
+        </div>
+        <!-- End of toolbar -->
+        <table id="${module}-grid" toolbar="#${module}-toolbar" width="100%"></table>
+    </div>
+    
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="${module}-editor"></div>
+<div id="${module}-password"></div>
+
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+	$('#${module}-grid').datagrid({
+		url:'${base}${pathRoot}list.bi',
+		rownumbers:true,
+		singleSelect:false,
+		pageSize:20,
+		pagination:true,
+		fitColumns:true,
+		fit:true,
+		columns:[[
+			{ field:"id",checkbox:true},
+			{ field:'code',title:'韭菜账号',width:100,sortable:true},
+			{ field:'name',title:'韭菜名称',width:100,sortable:true},
+        ]]
+	});
+	
+	$(function(){
+		$("#add${module}").click(function(){
+			form.open({
+				target:"#${module}-editor"
+				,formurl:"${base}${pathRoot}form.shtml"
+				,grid:"#${module}-grid"
+			});
+		});
+		$("#modify${module}").click(function(){
+			var items = $('#${module}-grid').datagrid('getSelections');
+			if(items.length==0){
+				$.messager.alert('警告','请至少选择一项','warning');
+				return ;
+			}
+			if(items.length>1){
+				$.messager.alert('警告','只能选择一项','warning');
+				return ;
+			}
+			form.open({
+				target:"#${module}-editor"
+				,grid:"#${module}-grid"
+				,formurl:"${base}${pathRoot}form.shtml"
+				,id:items[0].id
+				,listUrl:"${base}${pathRoot}list.bi"
+				,loaded:function($form){
+					$form.find("#password_tr").remove();
+				}
+			});
+		});
+
+		$("#remove${module}").click(function(){
+			var items = $('#${module}-grid').datagrid('getSelections');
+			if(items.length==0){
+				$.messager.alert('警告','请至少选择一项','warning');
+				return ;
+			}
+			$.messager.confirm("确认","确认要删除？",function(r){
+				if(r){
+					var ids="";
+					$.each(items,function(idx,item){
+						if(idx!=0){
+							ids+=",";
+						}
+						ids+=item.id;
+					});
+					$.messager.progress({
+						msg:"正在删除，请稍后..."
+					});
+					$.post("${base}${pathRoot}remove.bi",{ids:ids},function(){
+						$.messager.alert("提示","删除成功","info");
+						$("#${module}-grid").datagrid("reload");
+					}).always(function(){
+						$.messager.progress("close");
+					});
+				}
+			});
+		});
+		$("#reload${module}").click(function(){
+			$("#${module}-grid").datagrid("reload");
+		});
+
+
+        /**
+         * 激活账号
+         */
+		// $('#openCode${module}').click(function () {
+        //     alert("激活 ");
+        // });
+
+        $("#modifyPassword${module}").click(function(){
+            var items = $('#${module}-grid').datagrid('getSelections');
+            if(items.length==0){
+                $.messager.alert('警告','请至少选择一项','warning');
+                return ;
+            }
+            if(items.length>1){
+                $.messager.alert('警告','只能选择一项','warning');
+                return ;
+            }
+            form.open({
+                target:"#${module}-password"
+                ,grid:"#${module}-grid"
+                ,formurl:"${base}${pathRoot}password_form.shtml"
+                ,id:items[0].id
+                ,listUrl:"${base}${pathRoot}list.bi"
+            });
+        });
+
+
+        $("#${module}-search-form").submit(function(){
+			var params=$(this).serializeArray();
+			var prms={};
+			$.each(params,function(idx,item){
+				prms[item.name]=item.value;
+			});
+			$('#${module}-grid').datagrid("load",prms);
+			return false;
+		});
+
+	});
+</script>

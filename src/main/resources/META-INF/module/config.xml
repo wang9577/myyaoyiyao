@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module xmlns="http://www.ustudy.com.cn/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.ustudy.com.cn/config config.xsd" id="1" name="上海中医药大学智慧学习平台">
+	<Version>1.0.0</Version>
+	<Author>Hector.Tong</Author>
+	<Description><![CDATA[系统通用功能、字典管理、地区管理、用户信息管理]]></Description>
+	<Menus id="900000">
+		<!--基础数据管理 -->
+
+		<Menu name="韭菜管理" icon="teacher"
+			url="/admin/chives/chives_list.shtml">
+		</Menu>
+		<Menu name="基金管理" icon="data">
+			<Menu name="基金管理" icon="icon-application-view-list">
+				<Menu name="个人基金" icon="icon-application-view-list"
+					  url="/admin/fund/fund_list.shtml">
+				</Menu>
+				<Menu name="选择基金" icon="icon-application-view-list"
+					  url="/admin/fundselect/fundselect_list.shtml">
+				</Menu>
+
+			</Menu>
+		</Menu>
+
+	</Menus>
+
+	<Dicts>
+		<Dict code="USER_TYPE" name="用户类别">
+			<Item code="3" name="学生" ename="Student" used="true" alias=""><![CDATA[/student/home.shtml]]></Item>
+			<Item code="4" name="教师" ename="Teacher" used="false" alias=""><![CDATA[/teacher/home.shtml]]></Item>
+		</Dict>
+		<Dict code="STUDY_STATUS" name="学习状态">
+			<Item code="1" name="正在学习" ename="Learning" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="已学习" ename="Finish" used="true" alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+		<Dict code="COURSE_STATUS" name="课程审核状态">
+			<Item code="1" name="未审核" ename="Unaudited" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="驳回" ename="Rejected" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="3" name="设计中" ename="InDesign" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="4" name="设计完成" ename="DesignFinished" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="5" name="已上线" ename="Online" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="6" name="已关闭" ename="closed" used="true" alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+		<Dict code="POST_TYPE" name="帖子类型">
+			<Item code="1" name="普通帖子" ename="normal" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="教师答疑" ename="question" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="3" name="在线交流" ename="communication" used="true"
+				alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+		<Dict code="COURSE_TEAM_TYPE" name="教学团队职责">
+			<Item code="1" name="主讲教师" ename="master" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="助教" ename="tutor" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="3" name="教学秘书" ename="secretary" used="true"
+				alias=""><![CDATA[]]>
+			</Item>
+			<Item code="4" name="学生助理" ename="student assistant" used="true"
+				alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+		<Dict code="FORUM_POST_STATUS" name="bbs帖子状态">
+			<Item code="1" name="正常" ename="active" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="结贴" ename="finished" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="3" name="关闭" ename="closed" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="4" name="冻结" ename="frozen" used="true" alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+		<Dict code="FORUM_TYPE" name="bbs版块类型">
+			<Item code="1" name="课程问答" ename="CourseAQ" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="课程讨论" ename="CourseExchange" used="true"
+				alias=""><![CDATA[]]>
+			</Item>
+			<Item code="3" name="自由论坛" ename="BBS" used="true" alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+		<Dict code="BASE_QUESTION" name="基础题型">
+			<Item code="1" name="单选题" ename="ChoiceQuestion" used="true"
+				alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="多选题" ename="MultipleChoiceQuestion"
+				used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="11" name="主观题" ename="ShortAnswerQuestion"
+				used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="21" name="组合题" ename="CombinationQuestion"
+				used="true" alias=""><![CDATA[]]>
+			</Item>
+
+		</Dict>
+		<Dict code="Q_TYPE" name="发布状态">
+			<Item code="1" name="未发布" ename="Unpublished" used="true"
+				alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="已发布" ename="Published" used="true" alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+
+		<Dict code="RESOURCE_PATH">
+			<Item code="1" name="头像路径" ename="Avatar" used="true" alias=""><![CDATA[/images/avatar]]></Item>
+			<Item code="2" name="课程封面路径" ename="CourseCover" used="true"
+				alias=""><![CDATA[/images/cover]]></Item>
+		</Dict>
+		<Dict code="DIFFICULT_TYPE" name="难易程度">
+			<Item code="1" name="简单" ename="simple" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="2" name="中等" ename="middle" used="true" alias=""><![CDATA[]]>
+			</Item>
+			<Item code="3" name="困难" ename="hard" used="true" alias=""><![CDATA[]]>
+			</Item>
+		</Dict>
+
+		<Dict code="CONTENT_TYPE" name="学习材料类型">
+			<Item code="1" name="视频" ename="video" used="true" alias=""><![CDATA[content_video_body.shtml]]></Item>
+			<Item code="2" name="网页" ename="html" used="true" alias=""><![CDATA[content_html_body.shtml]]></Item>
+			<Item code="3" name="文档" ename="document" used="true" alias=""><![CDATA[content_document_body.shtml]]></Item>
+			<Item code="4" name="scorm课件" ename="scorm" used="true" alias=""><![CDATA[content_scorm_body.shtml]]></Item>
+			<Item code="5" name="练习题" ename="exercise" used="true" alias=""><![CDATA[content_exercise_body.shtml]]></Item>
+		</Dict>
+	</Dicts>
+</Module>

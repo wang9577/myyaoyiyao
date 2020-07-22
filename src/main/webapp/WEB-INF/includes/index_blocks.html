@@ -1,0 +1,117 @@
+[#ftl]
+
+[#macro index_css]
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/FontAwesomemaster/css/font-awesome.min.css">
+<link rel="stylesheet" href="${base}/static/frame/jquery/select2/dist/css/select2.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/swiper-4.5.0/css/swiper.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/common.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/index.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/bbs.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/mooc.css" media="all">
+
+
+[/#macro]
+
+[#macro index_js]
+<script src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+<script src="${base}/static/frame/jquery/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="${base}/static/frame/jquery/jquery-validation/dist/additional-methods.min.js"></script>
+<script src="${base}/static/frame/layui/layui.all.js" charset="utf-8"></script>
+<script src="${base}/static/frame/jquery/select2/dist/js/select2.full.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.box.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.pagesload.js"></script>
+<script src="${base}/static/frame/swiper-4.5.0/js/swiper.min.js"></script>
+<script src="${base}/static/frame/eschecker/eschecker.js"></script>
+<script src="${base}/static/root/js/browser.js"></script>
+[/#macro]
+
+[#macro data]
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/FontAwesomemaster/css/font-awesome.min.css">
+<link rel="stylesheet" href="${base}/static/css/monitor.css" media="all">
+
+[/#macro]
+
+[#macro exam_js]
+<link rel="stylesheet" type="text/css" href="${base}/static/frame/easyui/easyui/1.6.10/themes/default/easyui.css" />
+<!--<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>-->
+<script type="text/javascript" src="${base}/static/frame/easyui/easyui/1.6.10/jquery.easyui.min.js"></script>
+
+[/#macro]
+
+[#macro head title=""]
+<head>
+<meta charset="utf-8">
+<title>${title}-上海中医药大学智慧学习</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link  rel="shortcut icon" href="${base}/static/images/icons.png">
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=yes">
+[@index_css/]
+[@index_js/]
+[#nested]
+</head>
+[/#macro]
+
+[#macro banner]
+	[#global student=jcus.student()!]
+	[#global teacher=jcus.teacher()!]
+	[#if student.id??]
+		[@stu.banner/]
+	[#else]
+		[#if teacher.id??]
+			[@tch.banner/]
+		[#else]
+			[@comm.nologo_head/]
+		[/#if]
+	[/#if]
+	<div id="browser_alert"></div>
+[/#macro]
+
+[#macro footer]
+<div class="_footer" >
+	<div class="container">
+		<p>Copyright @ 2012 上海中医药大学版权所有</p>
+		<p style="color:#fce8b5 !important;">地址：上海市蔡伦路1200号 沪ICP备09008682号</p>
+		<p style="margin-bottom:20px; color:#fce8b5 !important;">联系电话：021-51322222</p>
+	</div>
+</div>
+[/#macro]
+[#function course_logo course w=0 h=160]
+  [#if jstr.isBlank(course.logo)]
+    [#return "${base}/static/images/zwtp.jpg"]
+  [#else]
+    [#assign photo=course.logo?eval]
+    [#if photo.type=="builtin"][#return "${base}/resource/cover/${photo.code}/${w}/${h}"]
+    [#else][#return "${base}/datas/thumb/PathFile/${photo.id}/${w}/${h}"][/#if]
+  [/#if]
+[/#function]
+
+[#function avatar size=100 student=jcus.student()]
+	[#if jstr.isBlank(student.photo)]
+		[#return "${base}/static/images/avatar.png"]
+	[#else]
+		[#assign photo=student.photo?eval]
+		[#if photo.type=="builtin"]
+			[#return "${base}/resource/avatar/${photo.code}/${size}/${size}"]
+		[#else]
+			[#return "${base}/datas/thumb/PathFile/${photo.id}/${size}/${size}"]
+		[/#if]
+	[/#if]
+[/#function]
+
+[#macro site_href college=(jweb.pathName('site')[0])!'0' course=(jweb.pathName('site')[1])!'0' sort=(jweb.pathName('site')[2])!'t' page=1]${base}/site/site_${college}-${course}-${sort}-${page}.htm[/#macro]
+
+[#macro mooc_href college=(jweb.pathName('mooc')[0])!'0' course=(jweb.pathName('mooc')[1])!'0' sort=(jweb.pathName('mooc')[2])!'t' page=1]${base}/site/mooc_${college}-${course}-${sort}-${page}.htm[/#macro]
+
+[#macro hotcourse_href college=(jweb.pathName('hotcourse')[0])!'0' course=(jweb.pathName('hotcourse')[1])!'0' status=(jweb.pathName('hotcourse')[2])!'0' sort=(jweb.pathName('hotcourse')[3])!'t' page=1]${base}/site/hotcourse_${college}-${course}-${status}-${sort}-${page}.htm[/#macro]
+
+[#macro exam_href college=(jweb.pathName('exam')[0])!'0' course=(jweb.pathName('exam')[1])!'0' sort=(jweb.pathName('exam')[2])!'t' page=1]${base}/site/exam_${college}-${course}-${sort}-${page}.htm[/#macro]
+
+[#macro doc_href college=(jweb.pathName('doc')[0])!'0' course=(jweb.pathName('doc')[1])!'0' sort=(jweb.pathName('doc')[2])!'t' page=1]${base}/site/doc_${college}-${course}-${sort}-${page}.htm[/#macro]

@@ -1,0 +1,23 @@
+template_update_delay: "0" #模板更新平率
+defaultEncoding: utf-8 #默认字符集
+url_escaping_charset: utf-8 #url字符集
+locale: zh_CN #本地字符集
+boolean_format: "true,false" #bool类型转换机制
+datetime_format: "yyyy-MM-dd HH:mm:ss" #时间类型转换格式
+date_format: "yyyy-MM-dd" #日期类型转换
+time_format: "HH:mm:ss" #时间转换
+number_format: "##0" #数字转换
+whitespace_stripping: "true"  
+object_wrapper: "freemarker.ext.beans.BeansWrapper" #freemarker对象转换器
+#默认载入的宏
+auto_import: "/vars/forms.html as form
+  ,/vars/html.html as html
+  ,/vars/frame.html as frame
+  ,/vars/table.html as table
+  ,/vars/dao.html as dao
+  ,/datas.html as datas
+  ,/common_blocks.html as comm
+  ,/stu_blocks.html as stu
+  ,/tch_blocks.html as tch
+  ,/mobile_blocks.html as m
+  ,/index_blocks.html as index"

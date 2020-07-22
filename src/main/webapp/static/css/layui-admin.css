@@ -1,0 +1,76 @@
+a{color:#333;text-decoration:none !important;cursor:pointer;}
+
+.header .layui-nav {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 0;
+	background: none;
+}
+
+
+
+.layui-side .layui-nav .layui-nav-item a i{
+	margin-right:5px;
+}
+
+.layui-side .layui-nav .layui-nav-item dd a {
+	height: 40px;
+	line-height: 40px;
+	padding-left: 40px;
+	padding-right: 30px;
+}
+
+
+
+/***main ****/
+
+.site-demo .layui-main {
+	margin: 15px;
+	line-height: 22px;
+}
+
+body .layui-layout-admin .site-demo {
+	bottom: 60px;
+	padding: 0;
+}
+
+.site-demo-title {
+	position: fixed;
+	left: 200px;
+	right: 0;
+	top: 65px;
+}
+
+.layui-layout-admin .site-demo-body {
+	top: 106px;
+}
+
+/***main end****/
+
+
+
+
+.footer {
+	line-height: 30px;
+	text-align: center;
+	color: #666;
+	font-weight: 300;
+}
+
+.footer a {
+	padding: 0 5px;
+}
+
+body .layui-layout-admin .footer-demo {
+	height: 50px;
+	padding: 5px 0;
+}
+
+
+.footer-demo p {
+	display: inline-block;
+	vertical-align: middle;
+	height: 50px;
+	padding-right: 10px;
+}

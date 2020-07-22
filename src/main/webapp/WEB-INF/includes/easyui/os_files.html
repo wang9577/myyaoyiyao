@@ -1,0 +1,75 @@
+[#ftl]
+[#macro fileChoose callback="setValue" root="" multi=false chooseDir=false]
+<style>
+	.directory{
+		color:steelblue
+	}
+</style>
+<div id="FilesChooseLayout" class="easyui-layout" data-options="{fit:true}">
+	<div data-options="{region:'west',title:'目录结构',border:true}" style="width:250px;">
+			<ul id="chooseDir"></ul>
+	</div>
+	<div data-options="{region:'center',title:'文件列表',border:true}">
+		<table id="chooseFiles"></table>
+	</div>
+</div>
+<div id="FilesChooseName">
+	<a class="">
+		<img >
+		<font></font>
+	</a>
+</div>
+<script type="text/javaScript">
+	$(function(){
+		$("#chooseDir").tree({
+			url:"${base}/os/files/dirs.bi?root=${root}"
+			,onSelect:function(r){
+				$("#chooseDir").tree("expand",r.target);
+				$("#chooseFiles").datagrid("load",{
+					root:"${root}"
+					,path:r.id
+					,ui:"easyui"
+				});
+			}
+		});
+		$("#FilesChooseLayout").on("click",".directory",function(){
+			$("#chooseDir").tree("expand",$("#chooseDir").tree("findBy",{
+				field:"id"
+				,value:$(this).attr("data")
+			}).target);
+			$("#chooseFiles").datagrid("load",{
+				root:"${root}"
+				,path:$(this).attr("data")
+				,ui:"easyui"
+			});
+		});
+		$("#chooseFiles").datagrid({
+			url:"${base}/os/files/list.bi"
+			,border:false
+			,singleSelect:${multi?then("false","true")}
+			,queryParams:{
+				root:"${root}"
+				,path:""
+				,ui:"easyui"
+			}
+			,columns:[[
+				{ field: "id", checkbox: true }
+				,{ field: "fileName", title:"名称" ,width:300,formatter:function(v,d){
+					var body=$("#FilesChooseName").clone();
+					if(d.type=="DIRECTORY"){
+						body.find("a").addClass("directory").attr("data",d.path);
+						body.find("img").attr("src","${base}/static/images/doc/folder-16.png");
+					}else{
+						body.find("img").attr("src","${base}/static/images/doc/"+d.ext+"-16.png");
+					}
+
+					body.find("font").html(d.fileName);
+					return body.html();
+				}}
+				,{ field: "lastModifyTimeFmt", title:"修改时间" ,width:120 }
+				,{ field: "lengthFmt", title:"大小" ,width:80}
+			]]
+		});
+	});
+</script>
+[/#macro]

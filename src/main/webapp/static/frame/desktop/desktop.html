@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>教学中心-Desktop</title>
+	<link rel="stylesheet" type="text/css" href="../easyui/easyui/1.6.10/themes/material-teal/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../easyui/easyui/1.6.10/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../easyui/css/icon.css">
+	<link rel="stylesheet" type="text/css" href="desktop.css">
+	<script type="text/javascript" src="../jquery/core/jquery-1.12.3.min.js"></script>
+	<script type="text/javascript" src="../easyui/easyui/1.6.10/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="jquery.desktop.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('body').desktop({
+				apps: [{
+					name: '课程建设',
+					icon: 'images/course.png',
+					width: 800,
+					height: 400,
+					left: 200,
+					top: 50,
+					href: '${base}/admin/course/online/online_list.shtml'
+				},{
+					name: '题库试卷',
+					icon: 'images/exam.png',
+					width: 800,
+					height: 400,
+					left: 300,
+					top: 100,
+					href: "/admin/exam/examquestion/examquestion_list.shtml"
+				},{
+					name: '讲义文库',
+					icon: 'images/pdf.png',
+					width: 800,
+					height: 400,
+					left: 300,
+					top: 100,
+					href: '${base}/admin/doc/doc_list.shtml'
+				},{
+					name: '教学管理',
+					icon: 'images/plan.png',
+					width: 800,
+					height: 400,
+					left: 300,
+					top: 100,
+					href: "${base}/admin/bbs/courseonline/bbs_list.shtml"
+				},{
+					name: '教学互动',
+					icon: 'images/qa.png',
+					width: 800,
+					height: 400,
+					left: 300,
+					top: 100,
+					href: "${base}/admin/bbs/courseonline/bbs_list.shtml"
+				},{
+					name: '智慧教室',
+					icon: 'images/network.png',
+					left: 300,
+					top: 100
+				},{
+					name: '课程网站',
+					icon: 'images/site.png',
+					width: 800,
+					height: 400,
+					left: 200,
+					top: 50,
+					href: '${base}/admin/site/catalog/catalog_list.shtml'
+				},{
+					name: '教学画像',
+					icon: 'images/monitor.png',
+					left: 400,
+					top: 150
+				}],
+				menus: [{
+					text: '课程建设  / Course',
+					iconCls: 'icon-monitor-link',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'System Update'
+						})
+					}
+				},{
+					text: '题库试卷 / Exam',
+					iconCls: 'icon-page-copy',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'System Update'
+						})
+					}
+				},{
+					text: '讲义文库 / Paper',
+					iconCls: 'icon-book-red',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: '讲义文库',
+							width: "800",
+							height: "500",
+							href: '${base}/admin/doc/doc_list.shtml'
+						})
+					}
+				},{
+					text: '教学管理 / Plan',
+					iconCls: 'icon-application-side-tree',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'System Update'
+						})
+					}
+				},{
+					text: '教学互动 / Q&A',
+					iconCls: 'icon-user-group',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'System Update'
+						})
+					}
+				},{
+					text: '智慧教室 / Room',
+					iconCls: 'icon-application-view-tile',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'System Update'
+						})
+					}
+				},{
+					text: '课程网站 / Room',
+					iconCls: 'icon-application-view-tile',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'System Update'
+						})
+					}
+				},{
+					text: '教学画像 / Face',
+					iconCls: 'icon-chart-pie',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'System Update'
+						})
+					}
+				},{
+					text: 'Help',
+					iconCls: 'icon-help',
+					handler: function(){
+						$('body').desktop('openApp', {
+							name: 'Help'
+						})
+					}
+				},{
+					text: 'Logout',
+					iconCls: 'icon-lock',
+					handler: function(){
+						$.messager.confirm({
+							title:'Confirm',
+							msg:'Are you sure you want to logout?',
+							border: 'thin'
+						})
+					}
+				}],
+				buttons: '#buttons'
+			})
+		});
+		settingsApp = null;
+		function settings(){
+			if (settingsApp){
+				$('body').desktop('openApp', settingsApp);
+				return;
+			}
+			settingsApp = {
+				id: 'settings',
+				name: 'Settings',
+				width: 600,
+				height: 400,
+				onBeforeClose: function(){
+					settingsApp = null;
+				}
+			};
+			$('body').desktop('openApp', settingsApp);
+			var template = '<div>' +
+				'<div region="north" style="padding:5px;height:45px;text-align:right"></div>' +
+				'<div region="south" style="text-align:right;height:45px;padding:5px"></div>' +
+				'<div region="west" title="Background" split="true" style="width:200px"><table id="settings-dl"></table></div>' +
+				'<div region="center" title="Preview"><img id="settings-img" style="border:0;width:100%;height:100%"></div>' +
+				'</div>';
+			var layout = $(template).appendTo('#settings');
+			layout.layout({
+				fit: true
+			});
+			var combo = $('<input>').appendTo(layout.layout('panel','north'));
+			combo.combobox({
+				data: [
+					{value:'default',text:'Default',group:'Base'},
+					{value:'gray',text:'Gray',group:'Base'},
+					{value:'metro',text:'Metro',group:'Base'},
+					{value:'material',text:'Material',group:'Base'},
+					{value:'material-teal',text:'Material Teal',group:'Base'},
+					{value:'bootstrap',text:'Bootstrap',group:'Base'},
+					{value:'black',text:'Black',group:'Base'},
+				],
+				width: 300,
+				label: 'Themes: ',
+				value: 'material-teal',
+				editable:false,
+				panelHeight: 'auto',
+				onChange: function(theme){
+					var link = $('head').find('link:first');
+					link.attr('href', 'https://www.jeasyui.com/easyui/themes/'+theme+'/easyui.css');
+				}
+			});
+			$('#settings-dl').datalist({
+				fit: true,
+				data: [
+					{"text":"Desktop","img":"images/bg.jpg"},
+					{"text":"Desktop2","img":"images/bg2.jpg"},
+					{"text":"Desktop3","img":"images/bg3.jpg"}
+				],
+				onLoadSuccess:function(){
+					$(this).datalist('selectRow', 0);
+				},
+				onSelect(index,row){
+					$('#settings-img').attr('src', row.img)
+				}
+			});
+			$('<a style="margin-right:10px"></a>').appendTo(layout.layout('panel','south')).linkbutton({
+				text: 'Ok',
+				width: 80,
+				onClick: function(){
+					$('body').desktop('setWallpaper', $('#settings-dl').datalist('getSelected').img);
+					$('#settings').window('close');
+				}
+			})
+			$('<a></a>').appendTo(layout.layout('panel','south')).linkbutton({
+				text: 'Cancel',
+				width: 80,
+				onClick: function(){
+					$('#settings').window('close');
+				}
+			})
+		}
+	</script>
+</head>
+<body>
+	<div id="buttons">
+		<a href="javascript:;" class="easyui-linkbutton" outline="true" plain="true" onclick="settings()">Settings</a>
+	</div>
+</body>
+</html>

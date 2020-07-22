@@ -1,0 +1,10 @@
+[#ftl]
+<p>最新学习任务：</p>
+<div class="_mt5">
+	[#list tasks as task]
+	<p class="_color999 _mt5"><span class="label label-primary">${task_index + 1}</span> ${task.title}</p>
+	[/#list]
+</div>
+<div class="_mt5 _txt_align_right">
+<a class='btn btn-primary btn-xs' href='/student/task/task_list.shtml' target='_blank'>查看任务>></a>
+</div>

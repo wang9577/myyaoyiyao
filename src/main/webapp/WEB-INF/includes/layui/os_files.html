@@ -1,0 +1,399 @@
+[#ftl]
+[#macro fileMngTable root="" limit=5368709120 ]
+<div class="layui-row">
+    <div class="layui-col-md12">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="mupload"><i
+                class="layui-icon">&#xe67c;</i>小上传文件</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="upload"><i
+                    class="layui-icon">&#xe67c;</i>大上传文件</button>
+            <div id="drop-area" style="display: none;">
+                <h3>拖入上传</h3>
+                <input type="file" title="点击选择文件">
+            </div>
+            <button class=" layui-btn layui-btn-primary layui-btn-sm" id="createFolder"><i
+                    class="fa fa-folder"></i>&nbsp;新建文件夹</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" id="deleteFiles"><i
+                    class="fa fa-trash"></i>&nbsp;删除</button>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="layui-row">
+    <div style="text-align:right;">网盘容量：<span
+            class="layui-badge layui-bg-blue">${jus.fileSize(limit)}</span>&nbsp;&nbsp;已使用：<span
+            class="layui-badge layui-bg-orange">${jus.fileSize(jcus.file.used(root,''))}</span></div>
+    <div class="layui-progress _mt5">
+        <div class="layui-progress-bar layui-bg-blue" lay-percent="${jcus.file.used(root,'')/limit*100}%">
+        </div>
+    </div>
+</div>
+<div id="files_panel">
+    <table id="files" lay-filter="files"></table>
+</div>
+<div id="upload_progress_bar" style="display: none;">
+    <div class="body">
+        <div class="title"></div>
+        <div class="layui-progress layui-progress-big">
+            <div class="layui-progress-bar layui-bg-blue" lay-percent="0%"></div>
+        </div>
+    </div>
+</div>
+<script id="FilesToolbar" type="text/html">
+    <a href="javaScript:void(0)" class="directory" path="" title="根目录">${root}</a>
+    {{# 
+        if(d.where.path){
+            $.each(d.where.path.substring(1).split("/"),function(){
+                var name=this;
+                var path=d.where.path.substring(0,d.where.path.indexOf("/"+name)+name.length+1);
+    }}
+        /
+        <a href="javaScript:void(0)" class="directory" style="color:#CD853F;font-size:16px;" path="{{path}}" title="{{path}}">{{name}}</a>
+    {{#
+            });
+        }
+    }}
+    <input type="hidden" id="curpath" value="{{d.where.path}}" >
+    
+</script>
+<script type="text/html" id="FileName">
+    {{#
+        if(d.type=="DIRECTORY"){
+    }}
+		<img src="${base}/static/images/doc/folder-16.png">
+        <a href="javaScript:void(0)" class="directory" path="{{d.path}}">
+            {{d.fileName}}
+        </a>
+    {{#
+        }else if(d.type="FILE"){
+    }}
+	<img src="${base}/static/images/doc/{{d.ext}}-16.png" onerror="this.src='${base}/static/images/doc/file-16.png'">
+    <a class="file" href="${base}/os/files/downfile.bi?root=${root}&path={{d.urlPath}}" target="_blank">
+        {{d.fileName}}
+    </a>
+    {{#
+        }
+    }}
+</script>
+<script type="text/javascript">
+    window.curpath = "/";
+    $(function () {
+        $("#upload").click(function () {
+            $("#drop-area input").trigger("click");
+        });
+        layui.use(["table", "upload", "element"], function () {
+            var table = layui.table;
+            var upload = layui.upload;
+            var element = layui.element;
+            $("#files_panel").on("click", ".directory", function () {
+                var path = $(this).attr("path");
+                table.reload("files", {
+                    url: "${base}/os/files/list.bi"
+                    , where: {
+                        root: '${root}'
+                        , path: path
+                    }
+                })
+            });
+            element.render();
+            $("#createFolder").click(function () {
+                layer.prompt({
+                    title: '请输入路径'
+                }, function (v, i) {
+                    var loadidx = layer.load();
+                    $.post("${base}/os/files/mkdirs.bi", {
+                        root: '${root}'
+                        , curpath: $("#curpath").val()
+                        , path: v
+                    }, function (res) {
+                        if (res.status) {
+                            table.reload("files");
+                            layer.close(i);
+                            layer.msg("创建成功", {
+                                icon: 6
+                            });
+                        } else {
+                            layer.msg("创建失败", {
+                                icon: 5
+                            });
+                        }
+                    }).fail(function () {
+                        layer.msg("创建失败", {
+                            icon: 5
+                        });
+                    }).always(function () {
+                        layer.close(loadidx);
+                    });
+                });
+            });
+            $("#deleteFiles").click(function () {
+                var checkStatus = table.checkStatus('files');
+                if (checkStatus.data.length) {
+                    layer.confirm("是否删除这些文件或文件夹?", {
+                        icon: 3, title: "提示"
+                    }, function (i) {
+                        var loadidx = layer.load();
+                        $.post("${base}/os/files/deleteFiles.bi", {
+                            root: '${root}'
+                            , file: checkStatus.data.map(file => file.path)
+                        }, function (res) {
+                            if (res.status) {
+                                table.reload("files");
+                                layer.close(i);
+                                layer.msg("删除成功", {
+                                    icon: 6
+                                });
+                            } else {
+                                layer.msg("删除失败", {
+                                    icon: 5
+                                });
+                            }
+                        }).fail(function () {
+                            layer.msg("删除失败", {
+                                icon: 5
+                            });
+                        }).always(function () {
+                            layer.close(loadidx);
+                        });
+                    });
+                } else {
+                    layer.msg("请选择一项", {
+                        icon: 5
+                    });
+                }
+            });
+            $("#drop-area").dmUploader({
+                url: "${base}/os/files/upfile.bi"
+                , maxFileSize: 536870912
+                , multiple: false
+                , onInit: function () {
+                    console.log('Callback: Plugin initialized');
+                }
+                , onFileSizeError: function (file) {
+                    layer.msg("<b>抱歉，你上传的文件过大。</b><br/>web方式只支持<font color='#FF5722'>500M</font>的文件上传，大文件请通过其它方式上传！！", { icon: 5, time: 5000 });
+                }
+                , onNewFile: function (id, file) {
+                    var $progress = $("#upload_progress_bar").clone();
+                    $progress.find(".body").attr("id", "body_" + id);
+                    $progress.find(".body .title").html("正在读取文件...");
+                    $progress.find(".layui-progress").attr("lay-filter", "file_progress");
+                    layer.open({
+                        content: $progress.html()
+                        , title: false
+                        , btn: false
+                        , closeBtn: 0
+                    });
+                    element.render("progress", "file_progress");
+                    element.progress("file_progress", "0%");
+                }
+                , onUploadProgress: function (id, p) {
+                    $("#body_" + id + " .title").html("正在上传文件...");
+                    element.progress("file_progress", p + "%");
+                }
+                , onUploadSuccess: function (id, res) {
+                    $("#body_" + id).find(".layui-progress").remove();
+                    $("#body_" + id + " .title").html('<i class="layui-icon layui-icon-face-smile" style="font-size: 30px; color: #5FB878;"></i>&nbsp;&nbsp;<b>上传成功！！</b>');
+                    table.reload("files");
+                }
+                , onUploadError: function (id, xhr, status, errorThrown) {
+                    $("#body_" + id).find(".layui-progress").remove();
+                    $("#body_" + id + " .title").html('<i class="layui-icon layui-icon-face-smile" style="font-size: 30px; color: #FF5722;"></i>&nbsp;&nbsp;<b>上传失败！！</b>');
+                }
+                , onUploadComplete: function (id) {
+                    setTimeout(() => {
+                        layer.closeAll();
+                    }, 3000);
+
+                }
+                , extraData: function () {
+                    return {
+                        root: '${root}'
+                        , path: $("#curpath").val()
+
+                    }
+                }
+            });
+            upload.render({
+                elem: "#mupload"
+                , url: "${base}/os/files/upfile.bi"
+                , accept: "file"
+                , multiple: true
+                , size: 5120
+                , before: function () {
+                    window.uploadidx = layer.load();
+                }
+                , allDone: function () {
+                    layer.msg("上传成功", { icon: 6 });
+                    table.reload("files");
+                    layer.close(window.uploadidx);
+                }
+                , error: function () {
+                    layer.msg("上传失败", { icon: 5 });
+                    layer.close(window.uploadidx);
+                }
+                , data: {
+                    root: '${root}'
+                    , path: function () {
+                        return $("#curpath").val();
+                    }
+                }
+            });
+            table.render({
+                elem: "#files"
+                , toolbar: "#FilesToolbar"
+                , page: false
+                , url: "${base}/os/files/list.bi"
+                , where: {
+                    root: '${root}'
+                    , path: ''
+                }
+                , skin: 'nob' //行边框风格
+                , even: true //开启隔行背景
+                , size: 'lg'
+                , cols: [[
+                    { field: "id", title: "ID", type: "checkbox" }
+                    , { field: "fileName", title: "名称", templet: "#FileName" }
+                    , { field: "lastModifyTimeFmt", title: "最后更新", width: 200 }
+                    , { field: "lengthFmt", title: "大小", width: 100 }
+                ]]
+            });
+
+        });
+    });
+</script>
+[/#macro]
+
+[#macro fileChoose callback="setValue" root="" multi=false chooseDir=false]
+<style>
+    .directory {
+        color: steelblue
+    }
+</style>
+<div id="files_panel">
+    <table id="files" lay-filter="files"></table>
+</div>
+
+<script id="FilesToolbar" type="text/html">
+    <a href="javaScript:void(0)" class="directory" path="" title="根目录"><i class="fa fa-home"></i></a>
+    {{# 
+        if(d.where.path){
+            $.each(d.where.path.substring(1).split("/"),function(){
+                var name=this;
+                var path=d.where.path.substring(0,d.where.path.indexOf("/"+name)+name.length+1);
+    }}
+        /
+        <a href="javaScript:void(0)" class="directory" path="{{path}}" title="{{path}}">{{name}}</a>
+    {{#
+            });
+        }
+    }}
+    <input type="hidden" id="curpath" value="{{d.where.path}}" >
+</script>
+<script type="text/html" id="FileName">
+    {{#
+        if(d.type=="DIRECTORY"){
+    }}
+		<img src="${base}/static/images/doc/folder-16.png">
+        <a href="javaScript:void(0)" class="directory" path="{{d.path}}">
+            {{d.fileName}}
+        </a>
+    {{#
+        }else if(d.type="FILE"){
+    }}
+		<img src="${base}/static/images/doc/{{d.ext}}-16.png">
+    	<a class="file" href="${base}/os/files/downfile.bi?root=${root}&path={{d.path}}" target="_blank">
+        	{{d.fileName}}
+    	</a>
+    {{#
+        }
+    }}
+</script>
+<script type="text/html" id="fileoper">
+    [#if chooseDir]
+    <button class="layui-btn layui-btn-xs" lay-event="choose"><i class="layui-icon">&#xe605;</i>选择</button>
+    [#else]
+    {{#
+        if(d.type=="FILE"){
+    }}
+        <button class="layui-btn layui-btn-xs" lay-event="choose"><i class="layui-icon">&#xe605;</i>选择</button>
+    {{#
+        }
+    }}
+    [/#if]
+</script>
+<script type="text/javascript">
+    window.curpath = "/";
+    $(function () {
+        layui.use(["table", "upload", "element"], function () {
+            var table = layui.table;
+            var upload = layui.upload;
+            var element = layui.element;
+            $("#files_panel").on("click", ".directory", function () {
+                var path = $(this).attr("path");
+                table.reload("files", {
+                    url: "${base}/os/files/list.bi"
+                    , where: {
+                        root: '${root}'
+                        , path: path
+                    }
+                })
+            });
+            $("#files_panel").on("click", ".ChooseFileBtn", function () {
+
+            });
+            element.render();
+            upload.render({
+                elem: "#upload"
+                , url: "${base}/os/files/upfile.bi"
+                , accept: "file"
+                , before: function () {
+                    window.uploadidx = layer.load();
+                }
+                , done: function () {
+                    layer.msg("上传成功", { icon: 6 });
+                    table.reload("files");
+                    layer.close(window.uploadidx);
+                }
+                , error: function () {
+                    layer.msg("上传失败", { icon: 5 });
+                    layer.close(window.uploadidx);
+                }
+                , data: {
+                    root: '${root}'
+                    , path: function () {
+                        return $("#curpath").val();
+                    }
+                }
+            });
+            table.on('tool(files)', function (oper) {
+                switch (oper.event) {
+                    case "choose":
+                        ${ callback } (oper.data);
+                        break;
+                }
+            });
+            table.render({
+                elem: "#files"
+                , toolbar: "#FilesToolbar"
+                , defaultToolbar: []
+                , page: false
+                , url: "${base}/os/files/list.bi"
+                , where: {
+                    root: '${root}'
+                    , path: ''
+                }
+                , skin: 'nob' //行边框风格
+                , even: false //开启隔行背景
+                , size: 'lg'
+                , cols: [[
+                    { field: "fileName", title: "名称", templet: "#FileName" }
+                    , { field: "lastModifyTimeFmt", title: "最后更新", width: 160 }
+                    , { field: "lengthFmt", title: "大小", width: 100 }
+                    , { field: "a", title: "", width: 150, templet: "#fileoper" }
+                ]]
+            });
+
+        });
+    });
+</script>
+[/#macro]

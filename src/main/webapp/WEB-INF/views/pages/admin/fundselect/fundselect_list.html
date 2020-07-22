@@ -1,0 +1,106 @@
+[#ftl]
+[#include "top.html"]
+<div id="${module}-content-layout" class="easyui-layout" data-options="fit:true">
+	<div data-options="region:'center',border:false,title:'韭菜管理'">
+		<!-- Begin of toolbar -->
+		<div id="${module}-toolbar">
+			<div class="frame-toolbar-button">
+				<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" id="reload${module}" plain="true">刷新</a>
+			</div>
+		</div>
+		<!-- End of toolbar -->
+		<table id="${module}-grid" toolbar="#${module}-toolbar" width="100%"></table>
+	</div>
+
+	<div data-options="region:'east',border:false,title:'选择管理' ,collapsed:true"  style="width:70%;">
+		<!-- Begin of toolbar -->
+		<div id="${module}-item-toolbar">
+
+
+		</div>
+		<!-- End of toolbar -->
+		<table id="${module}-item-grid" toolbar="#${module}-item-toolbar" width="100%"></table>
+	</div>
+
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="${module}-editor"></div>
+<div id="${module}-item-editor"></div>
+<div id="${module}-password"></div>
+<div id="${module}-config"></div>
+<script type="text/javascript">
+	$('#${module}-grid').datagrid({
+		url:'${base}/admin/chives/chives_list.bi',
+		rownumbers:true,
+		singleSelect:true,
+		pageSize:10,           
+		pagination:true,
+		fitColumns:false,
+		fit:true,
+		columns:[[
+			{ field:"id",checkbox:true}
+			,{ field:'code',title:'韭菜编号',width:100}
+			,{ field:'name',title:'韭菜标姓名',width:300}
+		]]
+		,onSelect:function(i,r){
+			$('#${module}-item-grid').datagrid("loadData",[]);
+			$("#${module}-content-layout").layout("expand","east");
+			$('#${module}-item-grid').datagrid("load",{"prm.chives.id":r.id});
+		}
+
+	});
+	
+	$('#${module}-item-grid').datagrid({
+		url:'${base}/admin/fundselect/fundselect_list.bi',
+		rownumbers:true,
+		singleSelect:false,
+		pageSize:20,
+		pagination:true,
+		fitColumns:false,
+		fit:true,
+		expand:false
+		,columns:[[
+			{ field:'fundCode',title:'基金编号',width:100,sortable:true}
+			,{field:'fundName',title:'基金名称',width:200}
+            ,{field:'dayTime',title:'日期',width:200}
+            ,{field:'selectTime',title:'选择时间',width:200}
+
+        ]]
+
+	});
+	
+	$(function(){
+
+
+
+        $("#${module}-item-search-form").submit(function(){
+            var params=$(this).serializeArray();
+            var prms={};
+            $.each(params,function(idx,item){
+                prms[item.name]=item.value;
+            });
+            var row = $('#${module}-grid').datagrid('getSelected');
+            prms =$.extend(prms,{"prm.chives.id":row.id});
+            $('#${module}-item-grid').datagrid("load",prms);
+            return false;
+        });
+
+
+        $("#reload${module}").click(function(){
+            $("#${module}-grid").datagrid("reload");
+        });
+
+		$("#reloaditem${module}").click(function(){
+			$("#${module}-item-grid").datagrid("reload");
+		});
+		
+
+
+
+
+
+
+
+		
+	});
+</script>

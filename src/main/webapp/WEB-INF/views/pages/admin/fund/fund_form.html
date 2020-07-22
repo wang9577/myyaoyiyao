@@ -1,0 +1,16 @@
+[#ftl]
+[#include "top.html"]
+<div class="easyui-dialog" id="Roles_new" data-options="closed:true,iconCls:'icon-save'" style="width:600px; padding:10px;">
+	<form id="${module}-form" method="post" action="${base}/admin/fund/fund_save.bi">
+        <input type="hidden" value="${jweb.pathName('chivesId')!}" name="chives.id">
+        <table>
+            <tr>
+                <td><input type="text" name="fundCode" class="easyui-textbox" data-options="{required:true,labelWidth:100,validateOnCreate:true,missingMessage:'请输入编号',width:500,label:'基金编号：'}"/></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="fundName" class="easyui-textbox" data-options="{required:true,validateOnCreate:true,missingMessage:'请输入名称',width:500,label:'基金名称：',labelWidth:100}"/></td>
+            </tr>
+
+        </table>
+    </form>
+</div>

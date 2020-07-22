@@ -1,0 +1,14 @@
+.layui-layer-player .layui-layer-title {
+	background: #333333;
+	color: #fff;
+	border: none
+}
+
+.layui-layer-player .layui-layer-btn a {
+	background: #333333;
+	border-color: #333333
+}
+
+.layui-layer-player .layui-layer-btn .layui-layer-btn1 {
+	background: #aaaaaa
+}

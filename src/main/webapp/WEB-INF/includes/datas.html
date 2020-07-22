@@ -1,0 +1,10 @@
+[#ftl]
+
+[#function parties]
+	[#local parties=jdao.hql("from LoginUsers where user=?",[jsec.user()])()[0].party.allChildren]
+	[#return parties]
+[/#function]
+
+[#function getDicts(dictCode)]
+[#return (jdao.hql("from DictionaryItem where dictionary.code=? and used=true order by sortNum",[dictCode])())![] /]
+[/#function]

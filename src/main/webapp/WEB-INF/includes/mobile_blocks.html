@@ -1,0 +1,137 @@
+[#ftl]
+[#macro head title]
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>${title}</title>
+	<link href="${base}/static/frame/weui-master/css/weui.css" rel="stylesheet" type="text/css">
+	<link href="${base}/static/frame/weui-master/css/weuix.css" rel="stylesheet" type="text/css">
+	<link href="${base}/static/css/mobile.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+	<script src="${base}/static/frame/layui/layui.all.js" charset="utf-8"></script>
+	<script src="${base}/static/frame/weui-master/js/zepto.min.js" type="text/javascript"></script>
+	<script src="${base}/static/frame/weui-master/js/zepto.weui.min.js" type="text/javascript"></script>
+    <script src="${base}/static/frame/weui-master/js/swipe.js" type="text/javascript"></script>
+    [#nested]
+</head>
+[/#macro]
+[#macro tabs]
+<div class="weui-tabbar tab-bottom">
+    <a href="${base}/m/index.shtml" class="weui-tabbar__item [#if jweb.pathInfo().viewName='index']weui-bar__item_on[/#if]">
+        <i class="icon icon-27 f27 weui-tabbar__icon"></i>
+        <p class="weui-tabbar__label">首页</p>
+    </a>
+    <a href="${base}/m/student/mycourses.shtml" class="weui-tabbar__item [#if jweb.pathInfo().viewName='mycourses']weui-bar__item_on[/#if]">
+        <i class="icon icon-28 f27 weui-tabbar__icon"></i>
+        <p class="weui-tabbar__label">课程学习</p>
+    </a>
+    <a href="${base}/m/student/tasks.shtml" class="weui-tabbar__item [#if jweb.pathInfo().viewName='tasks']weui-bar__item_on[/#if]">
+        <i class="icon icon-29 f27 weui-tabbar__icon"></i>
+        <p class="weui-tabbar__label">作业任务</p>
+    </a>
+    <a href="${base}/m/student/tests.shtml" class="weui-tabbar__item [#if jweb.pathInfo().viewName='tests']weui-bar__item_on[/#if]">
+        <i class="icon icon-29 f27 weui-tabbar__icon"></i>
+        <p class="weui-tabbar__label">在线考试</p>
+    </a>
+    <a href="${base}/m/student/center.shtml" class="weui-tabbar__item ">
+        <i class="icon icon-30 f27 weui-tabbar__icon"></i>
+        <p class="weui-tabbar__label">个人中心</p>
+    </a>
+</div>
+[/#macro]
+[#macro nav back title]
+<div class="weui-btn_warn weui-header ">
+    <div class="weui-header-left"> <a class="icon icon-109 f-white" href="${back}"></a> </div>
+    <h1 class="weui-header-title">${title}</h1>
+    [#--
+    <div class="weui-header-right"><a class="icon icon-22 f-white"></a></div>
+    --]
+</div>
+[/#macro]
+[#macro course_header course]
+<ul class="list5">
+    <li class="row-flex">
+        <div class="row-image">
+            <img src="${index.course_logo(course)}" onerror="this.src='${base}/static/images/zwtp.jpg'"
+                class="img-border" width="160" />
+        </div>
+        <div class="row-flex-item">
+            <dl class="row-column-main">
+                <dt>
+                    ${course.name}
+                </dt>
+                <dd>
+                    <span>主讲教师：${course.teacher.name}</span>
+                </dd>
+                <dd>
+                    [#if jcus.student()??]
+                    <div class="weui-flex">
+                        <div class="weui-flex__item">学习进度</div>[#assign
+                        progress=jcus.studyProgress(jcus.student(),course)]
+                        <div>${progress.progress/progress.total*100}%</div>
+                    </div>
+                    <div class="weui-progress">
+                        <div class="weui-progress__bar">
+                            <div class="weui-progress__inner-bar js_progress"
+                                style="width: ${progress.progress/progress.total*100}%;"></div>
+                        </div>
+                    </div>
+                    [#else]
+                    [/#if]
+                </dd>
+            </dl>
+        </div>
+    </li>
+</ul>
+[/#macro]
+
+[#macro packagetree treelist contents root=true]
+
+<ul class="tree" style="margin-top: 0px;[#if !root]display:none;[/#if]">
+    <li >
+        <div class="row-flex folder" style="line-height:38px;">
+            <div class="item close"></div>
+            <div class="row-flex-item">
+                &nbsp;&nbsp;${(treelist.title)!}
+            </div>
+            <div class="row-right"></div>
+        </div>
+        [#if treelist.children??]
+        [#list treelist.children as child]
+        [@packagetree treelist=child contents=contents root=false/]
+        [/#list]
+        [#else]
+        <ul class="tree" style="display: none;">
+            [#list contents[treelist.id]![] as itm]
+            [#local child=itm.contentObj]
+            
+            [#if child.contentType=="1"]
+            <li class="row-flex content " style="line-height:38px;" data="${child.id}" title="${child.name}" path="${base}/student/course/content_video_body.shtml?content_id=${child.id}">
+            [#elseif child.contentType=="2"]
+            <li class="row-flex content" style="line-height:38px;" data="${child.id}" title="${child.name}" path="${base}/student/course/content_html_body.shtml?content_id=${child.id}">
+            [#elseif child.contentType=="3"]
+            <li class="row-flex content" style="line-height:38px;" data="${child.id}" title="${child.name}" path="${base}/m/student/content/doc.shtml?content_id=${child.id}">
+            [/#if]
+                <div class="item [#if itm.result>0]done[#elseif itm.record>0]doing[#else]undo[/#if]"></div>
+                <div class="row-flex-item" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;width:100px;">
+                    &nbsp;&nbsp;${child.name}
+                </div>
+                <div class="row-right" >
+                    [#if child.contentType=="1"]
+                    <i class="layui-icon layui-icon-play"></i>
+                    [#elseif child.contentType=="2"]
+                    <i class="layui-icon layui-icon-read"></i>
+                    [#elseif child.contentType=="3"]
+                    <i class="layui-icon layui-icon-file"></i>
+                    [/#if]
+                    ${child.getStudyTimeFmt()}
+                    <span class="arrow"></span>
+                </div>
+            </li>
+            
+            [/#list]
+        </ul>
+        [/#if]
+    </li>
+</ul>
+[/#macro]

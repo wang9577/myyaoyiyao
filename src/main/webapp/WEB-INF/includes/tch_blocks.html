@@ -1,0 +1,606 @@
+[#ftl]
+[#global teacher=jcus.teacher()!]
+
+[#macro tch_css]
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap-theme.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/FontAwesomemaster/css/font-awesome.min.css">
+<link rel="stylesheet" href="${base}/static/css/common.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/index.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/bbs.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/course.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/mooc.css" media="all">
+[/#macro]
+
+[#macro tch_js]
+<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/jquery/jquery-validation/dist/jquery.validate.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/jquery/jquery-validation/dist/additional-methods.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="${base}/static/frame/layui/layui.all.js" charset="utf-8"></script>
+<script type="text/javascript" src="${base}/static/frame/echarts/shine.js" charset="utf-8"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.box.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.pagesload.js"></script>
+<script type="text/javascript" src="${base}/static/frame/eschecker/eschecker.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/browser.js"></script>
+[/#macro]
+
+[#macro head title=""]
+<head>
+	<meta charset="utf-8">
+	<title>${title}-教师培训</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=yes">
+	[@tch_css/]
+	[@tch_js/]
+	[#nested]
+</head>
+[/#macro]
+
+[#macro header]
+[#assign teacher = jcus.teacher()]
+<div class="header navbar">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="${base}/teacher/home.shtml">
+				<img src="${base}/static/images/logo.png" width="200"/>
+			</a>
+		</div>
+
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="${tch.avatar(teacher)}" class="user-header">${teacher.name!} <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a id="modifyPassword" href="javascript:void(0)">修改密码</a></li>
+						<li><a id="signout" href="javascript:void(0)">退出系统</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script>
+    $(function () {
+        $("#signout").click(function(e) {
+            layer.confirm("是否退出系统?", function(r) {
+                if (r) {
+                    $.get("${base}/logout.bi", function(e) {
+                        window.location.href = "${base}/login.htm";
+                    });
+                }
+            });
+        });
+        $("#modifyPassword").click(function () {
+            var loadidx = layer.load();
+            $.get("${base}/teacher/change_password.shtml", function (h) {
+                var diaidx = layer.open({
+                    content: h
+                    , type: 1
+                    , closeBtn: 0
+                    , shadeClose: true
+                    , title: "修改密码"
+                    , btn: ["提交", "取消"]
+                    , yes: function (i,h) {
+                        var $form=h.find("form");
+                        if(!$form.find("input[name='password']").val()){
+                            layer.msg("请输入原始密码！",{icon:5});
+                            return false;
+                        }
+                        if(!$form.find("input[name='newPassword']").val()){
+                            layer.msg("请输入新密码！",{icon:5});
+                            return false;
+                        }
+                        if($form.find("input[name='newPassword']").val()!=$form.find("input[name='confirmPassword']").val()){
+                            layer.msg("两次输入密码不一致！",{icon:5});
+                            return false;
+                        }
+                        var loadidx=layer.load();
+                        $.post("${base}/protected/login_user/change_password.bi",$form.serialize(),function(res){
+                            if(res.status){
+                                layer.msg(res.msg,{icon:6});
+                                layer.close(diaidx)
+                            }else{
+                                layer.msg(res.msg,{icon:5});
+                            }
+                        }).always(function(){
+                            layer.close(loadidx);
+                        });
+                        return false;
+                    }
+                });
+                layer.close(loadidx);
+            });
+        });
+    });
+</script>
+[/#macro]
+
+
+[#macro left_menu]
+<div class="widget">
+	<div class="_header _bg"><span class="_title1">个人中心</span></div>
+	<div class="_body">
+		<ul class="side-menu">
+			<li class="${(jweb.pathInfo().viewName=='home')?then('cur','')}" ><a href="${base}/teacher/home.shtml">研修项目</a></li>
+			<li class="${(jweb.pathInfo().viewName=='topic')?then('cur','')}" ><a href="${base}/teacher/topic.shtml">我的话题</a></li>
+			<li class="${(jweb.pathInfo().viewName=='question')?then('cur','')}" ><a href="${base}/teacher/question.shtml">我的问答</a></li>
+			<li class="${(jweb.pathInfo().viewName=='resources')?then('cur','')}" ><a href="${base}/teacher/resources.shtml">我的资源</a></li>
+			<li class="${(jweb.pathInfo().viewName=='note')?then('cur','')}" ><a href="${base}/teacher/note.shtml">我的笔记</a></li>
+
+			[#--
+			<li><a href="">缴费记录</a></li>
+			--]
+		</ul>
+	</div>
+
+</div>
+<div class="widget">
+	<div class="_header"><span class="_title1">个人统计</span></div>
+	<div class="_body">
+		<ul class="side-menu">
+			[#global myProjectNum=(jdao.hql("select count(*) from ProjectTeacher where teacher.id=?",[teacher.id!])()[0])!{}]
+
+			<li><i></i>参加研修：<span class="layui-badge">${myProjectNum!}</span></li>
+			[#global myWorkNum=(jdao.hql(" select COUNT(DISTINCT projectWorkshop.id) from ProjectWorkshopTeacher where teacher.id=? ",[teacher.id!])()[0])!{}]
+
+			<li><i></i>工作坊：<span class="layui-badge">${myWorkNum!}</span></li>
+			[#global mytopicNum=(jdao.hql("select count(*) from ProjectForum where creator=? and forumType = 'TOPIC' ",[teacher.id!])()[0])!{}]
+
+			<li><i></i>发起话题：<span class="layui-badge">${mytopicNum!}</span></li>
+
+			[#global myquestionNum=(jdao.hql("select count(*) from ProjectReply where teacher.id=? and projectForum.forumType = 'QUESTION' ",[teacher.id!])()[0])!{}]
+
+			<li><i></i>参与问答：<span class="layui-badge">${myquestionNum!}</span></li>
+
+			[#global myresourcesNum=(jdao.hql("select count(*) from ProjectResources where teacher.id=?",[teacher.id!])()[0])!{}]
+
+			<li><i></i>上传资源：<span class="layui-badge">${myresourcesNum!}</span></li>
+
+			[#global mytaskNum=(jdao.hql("select count(*) from ProjectTeacherTask where teacher.id=? ",[teacher.id!])()[0])!{}]
+
+			<li><i></i>提交作业：<span class="layui-badge">${mytaskNum!}</span></li>
+		</ul>
+	</div>
+</div>
+[/#macro]
+
+[#macro right_panel]
+<div class="widget">
+	<div class="_header"><span class="_title1">个人统计</span></div>
+	<div class="_body">
+		<ul class="side-menu">
+			<li><i></i>参加研修：<span class="layui-badge">6</span></li>
+			<li><i></i>工作坊：<span class="layui-badge">6</span></li>
+			<li><i></i>发表日志：<span class="layui-badge">6</span></li>
+			<li><i></i>发起话题：<span class="layui-badge">6</span></li>
+			<li><i></i>上传资源：<span class="layui-badge">6</span></li>
+			<li><i></i>提交作业：<span class="layui-badge">6</span></li>
+			<li><i></i>发布活动：<span class="layui-badge">6</span></li>
+		</ul>
+	</div>
+</div>
+[/#macro]
+
+[#macro footer]
+<div class="container zyy-footer">
+	<div class="bottom">上海中医药大学版权所有 Copyright 2018-2020 shutcm.edu.cn. All Rights Reserved</div>
+</div>
+[/#macro]
+
+[#macro project_top_menus project]
+[#assign teacher = jcus.teacher()]
+<div class="layui-fluid" style="padding:0;">
+	<div class="header header_bg1 navbar">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="${base}/teacher/study/index.shtml?project_id=${project.id}">
+				<img src="${base}/static/images/logo.png" width="200"/>
+			</a>
+		</div>
+
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				[#list jdao.enums("com.ustudy.entity.project.ProjectNotice$NoticeType") as type]
+				<li [#if (jweb.pathName('notice_type')!) == type.value]class="active"[/#if] ><a href="${base}/teacher/study/news.shtml?notice_type=${type.value}&project_id=${project.id!}">${type.label}</a></li>
+				[/#list]
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="${tch.avatar(teacher)}" class="user-header">${teacher.name!} <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a id="modifyPassword" href="javascript:void(0)">修改密码</a></li>
+						<li><a id="signout" href="javascript:void(0)">退出系统</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+    $(function () {
+        $("#signout").click(function(e) {
+            layer.confirm("是否退出系统?", function(r) {
+                if (r) {
+                    $.get("${base}/logout.bi", function(e) {
+                        window.location.href = "${base}/login.htm";
+                    });
+                }
+            });
+        });
+        $("#modifyPassword").click(function () {
+            var loadidx = layer.load();
+            $.get("${base}/teacher/change_password.shtml", function (h) {
+                var diaidx = layer.open({
+                    content: h
+                    , type: 1
+                    , closeBtn: 0
+                    , shadeClose: true
+                    , title: "修改密码"
+                    , btn: ["提交", "取消"]
+                    , yes: function (i,h) {
+                        var $form=h.find("form");
+                        if(!$form.find("input[name='password']").val()){
+                            layer.msg("请输入原始密码！",{icon:5});
+                            return false;
+                        }
+                        if(!$form.find("input[name='newPassword']").val()){
+                            layer.msg("请输入新密码！",{icon:5});
+                            return false;
+                        }
+                        if($form.find("input[name='newPassword']").val()!=$form.find("input[name='confirmPassword']").val()){
+                            layer.msg("两次输入密码不一致！",{icon:5});
+                            return false;
+                        }
+                        var loadidx=layer.load();
+                        $.post("${base}/protected/login_user/change_password.bi",$form.serialize(),function(res){
+                            if(res.status){
+                                layer.msg(res.msg,{icon:6});
+                                layer.close(diaidx)
+                            }else{
+                                layer.msg(res.msg,{icon:5});
+                            }
+                        }).always(function(){
+                            layer.close(loadidx);
+                        });
+                        return false;
+                    }
+                });
+                layer.close(loadidx);
+            });
+        });
+    });
+</script>
+[/#macro]
+
+
+
+[#macro tutor_top_menus project]
+[#assign teacher = jcus.teacher()]
+<div class="layui-fluid" style="padding:0;">
+	<div class="header header_bg1 navbar">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="${base}/teacher/tutor/index.bi?project_id=${project.id}">
+				<img src="${base}/static/images/logo.png" width="200"/>
+			</a>
+		</div>
+
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				[#list jdao.enums("com.ustudy.entity.project.ProjectNotice$NoticeType") as type]
+				<li [#if (jweb.pathName('notice_type')!) == type.value]class="active"[/#if] ><a href="${base}/teacher/tutor/top/news.shtml?notice_type=${type.value}&project_id=${project.id!}">${type.label}</a></li>
+				[/#list]
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="${tch.avatar(teacher)}" class="user-header">${teacher.name!} <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a id="modifyPassword" href="javascript:void(0)">修改密码</a></li>
+						<li><a id="signout" href="javascript:void(0)">退出系统</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+    $(function () {
+        $("#signout").click(function(e) {
+            layer.confirm("是否退出系统?", function(r) {
+                if (r) {
+                    $.get("${base}/logout.bi", function(e) {
+                        window.location.href = "${base}/login.htm";
+                    });
+                }
+            });
+        });
+        $("#modifyPassword").click(function () {
+            var loadidx = layer.load();
+            $.get("${base}/teacher/change_password.shtml", function (h) {
+                var diaidx = layer.open({
+                    content: h
+                    , type: 1
+                    , closeBtn: 0
+                    , shadeClose: true
+                    , title: "修改密码"
+                    , btn: ["提交", "取消"]
+                    , yes: function (i,h) {
+                        var $form=h.find("form");
+                        if(!$form.find("input[name='password']").val()){
+                            layer.msg("请输入原始密码！",{icon:5});
+                            return false;
+                        }
+                        if(!$form.find("input[name='newPassword']").val()){
+                            layer.msg("请输入新密码！",{icon:5});
+                            return false;
+                        }
+                        if($form.find("input[name='newPassword']").val()!=$form.find("input[name='confirmPassword']").val()){
+                            layer.msg("两次输入密码不一致！",{icon:5});
+                            return false;
+                        }
+                        var loadidx=layer.load();
+                        $.post("${base}/protected/login_user/change_password.bi",$form.serialize(),function(res){
+                            if(res.status){
+                                layer.msg(res.msg,{icon:6});
+                                layer.close(diaidx)
+                            }else{
+                                layer.msg(res.msg,{icon:5});
+                            }
+                        }).always(function(){
+                            layer.close(loadidx);
+                        });
+                        return false;
+                    }
+                });
+                layer.close(loadidx);
+            });
+        });
+    });
+</script>
+[/#macro]
+
+[#macro study_left_menus project]
+<img src="${base}/datas/load/PathFile/${project.logo!}" onerror="this.src='/static/images/project.png'" width="100%" class="_radius5" />
+<div class="list-group _mt10">
+	<a href="${base}/teacher/study/index.bi?project_id=${project.id}" class="list-group-item ${(jweb.pathInfo().viewName=='index')?then('active','')}">
+		<h4 class="list-group-item-heading _font16">项目首页</h4>
+	</a>
+
+	[@jdao.hql(" from ProjectStage where project = ? ", [project])]
+	<a href="${base}/teacher/study/stage_course.shtml?ps_id=${item.id}" class="list-group-item ${((jweb.pathName("ps_id")!)==item.id)?then('active','')}">
+	<h4 class="list-group-item-heading _font16">${item.name!}</h4>
+	<p class="list-group-item-text _font12">${(jdata.date(item.startTime)?string("yyyy/MM/dd"))!} 至  ${(jdata.date(item.endTime)?string("yyyy/MM/dd"))!}</p>
+	</a>
+	[/@]
+</div>
+
+<div class="list-group">
+	<a href="${base}/teacher/study/workshop_list.shtml?project_id=${project.id}" class="list-group-item ${(jweb.pathInfo().viewName=='workshop_list')?then('active','')}">工作坊 </a>
+
+	<a href="${base}/teacher/study/expert.shtml?project_id=${project.id}" class="list-group-item ${(jweb.pathInfo().viewName=='expert')?then('active','')}">专家答疑</a>
+
+	<a href="#" class="list-group-item ">直播活动</a>
+</div>
+
+<div class="list-group">
+	<a href="javascript:void(0);" class="list-group-item projectScore ${(jweb.pathInfo().viewName=='score')?then('active','')}">考核成绩</a>
+	<script type="text/javascript">
+        $(function () {
+            $('.projectScore').click(function () {
+              	var loadIndex = layer.load();
+                var projectId = '${project.id}';
+                var teacherId = '${teacher.id!}';
+                $.post("${base}/teacher/study/check_score.bi", {projectId:projectId,teacherId:teacherId}, function (res) {
+					if(res.status){
+					    location.href='${base}/teacher/study/score.shtml?project_id=${project.id}&score_id='+res.id;
+					}else {
+					    layer,msg(res.msg);
+					}
+                });
+            });
+        });
+	</script>
+	<a href="${base}/teacher/study/study_record_list.shtml?project_id=${project.id}" class="list-group-item ${(jweb.pathInfo().viewName=='study_record_list')?then('active','')}">学习记录</a>
+</div>
+[/#macro]
+
+[#macro tutor_left_menus project]
+<img src="${base}/datas/load/PathFile/${project.logo!}" onerror="this.src='/static/images/project.png'" width="100%" class="_radius5" />
+<div class="list-group _mt10">
+	[@jdao.hql(" from ProjectWorkshop where project = ? ", [project])]
+	<a href="${base}/teacher/tutor/index.bi?project_id=${project.id}&pw_id=${item.id}" class="list-group-item ${((jweb.pathName("pw_id")!)==item.id)?then('active','')}"">
+		<h4 class="list-group-item-heading">${item.name!}</h4>
+	</a>
+	[/@]
+	[#global expertId=(jdao.hql("from ProjectExpert where project.id=? and teacher.id=? and status = true",[project.id,teacher.id])()[0])!{}]
+	[#if expertId.id??]
+	<a href="${base}/teacher/tutor/expert.shtml?project_id=${project.id}" class="list-group-item ">专家答疑</a>
+	[/#if]
+
+	<a href="javascript:void(0);" class="list-group-item tutorScore ${(jweb.pathInfo().viewName=='score')?then('active','')}">我的考核</a>
+		<script type="text/javascript">
+            $(function () {
+                $('.tutorScore').click(function () {
+                    var loadIndex = layer.load();
+                    var projectId = '${project.id}';
+                    var teacherId = '${teacher.id!}';
+                    $.post("${base}/tutor/check/tutor_score.bi", {projectId:projectId,teacherId:teacherId}, function (res) {
+                        console.log(res);
+                        if(res.status){
+                           location.href='${base}/teacher/tutor/score.shtml?project_id=${project.id}&score_id='+res.id;
+                        }else {
+                            layer,msg(res.msg);
+                        }
+                    });
+                });
+            });
+		</script>
+</div>
+
+[@jdao.hql(" from ProjectStage where project = ?", [project])]
+<a href="${base}/teacher/tutor/look/look_course.shtml?ps_id=${item.id}" class="list-group-item ${((jweb.pathName("ps_id")!)==item.id)?then('active','')}">
+	<h4 class="list-group-item-heading _font16">${item.name!}</h4>
+	<p class="list-group-item-text _font12">${(jdata.date(item.startTime)?string("yyyy/MM/dd"))!} 至  ${(jdata.date(item.endTime)?string("yyyy/MM/dd"))!}</p>
+</a>
+[/@]
+
+[/#macro]
+
+[#macro workshop_top_menus workshop]
+<div class="header header_bg1 navbar">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">
+				<img src="${base}/static/images/logo.png" width="200"/>
+			</a>
+		</div>
+
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="${(jweb.pathInfo().viewName=='index')?then('active','')}"><a href="${base}/teacher/workshop/index.shtml?workshop_id=${workshop.id}">通知公告</a></li>
+				<li class="${(jweb.pathInfo().viewName=='news')?then('active','')}"><a href="${base}/teacher/workshop/news.shtml?workshop_id=${workshop.id}">班级简报</a></li>
+				<li class="${(jweb.pathInfo().viewName=='resources')?then('active','')}"><a href="${base}/teacher/workshop/resources.shtml?workshop_id=${workshop.id}">资源分享</a></li>
+				<li class="${(jweb.pathInfo().viewName=='bbs')?then('active','')}"><a href="${base}/teacher/workshop/bbs.shtml?workshop_id=${workshop.id}">话题</a></li>
+				<li class="${(jweb.pathInfo().viewName=='qa')?then('active','')}"><a href="${base}/teacher/workshop/qa.shtml?workshop_id=${workshop.id}">问答</a></li>
+				<li class="${(jweb.pathInfo().viewName=='student')?then('active','')}"><a href="${base}/teacher/workshop/student.shtml?workshop_id=${workshop.id}">班级成员</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="${tch.avatar(teacher)}" class="user-header">${teacher.name!} <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a id="modifyPassword" href="javascript:void(0)">修改密码</a></li>
+						<li><a id="signout" href="javascript:void(0)">退出系统</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+    $(function () {
+        $("#signout").click(function(e) {
+            layer.confirm("是否退出系统?", function(r) {
+                if (r) {
+                    $.get("${base}/logout.bi", function(e) {
+                        window.location.href = "${base}/login.htm";
+                    });
+                }
+            });
+        });
+        $("#modifyPassword").click(function () {
+            var loadidx = layer.load();
+            $.get("${base}/teacher/change_password.shtml", function (h) {
+                var diaidx = layer.open({
+                    content: h
+                    , type: 1
+                    , closeBtn: 0
+                    , shadeClose: true
+                    , title: "修改密码"
+                    , btn: ["提交", "取消"]
+                    , yes: function (i,h) {
+                        var $form=h.find("form");
+                        if(!$form.find("input[name='password']").val()){
+                            layer.msg("请输入原始密码！",{icon:5});
+                            return false;
+                        }
+                        if(!$form.find("input[name='newPassword']").val()){
+                            layer.msg("请输入新密码！",{icon:5});
+                            return false;
+                        }
+                        if($form.find("input[name='newPassword']").val()!=$form.find("input[name='confirmPassword']").val()){
+                            layer.msg("两次输入密码不一致！",{icon:5});
+                            return false;
+                        }
+                        var loadidx=layer.load();
+                        $.post("${base}/protected/login_user/change_password.bi",$form.serialize(),function(res){
+                            if(res.status){
+                                layer.msg(res.msg,{icon:6});
+                                layer.close(diaidx)
+                            }else{
+                                layer.msg(res.msg,{icon:5});
+                            }
+                        }).always(function(){
+                            layer.close(loadidx);
+                        });
+                        return false;
+                    }
+                });
+                layer.close(loadidx);
+            });
+        });
+    });
+</script>
+<div class="layui-container">
+	<div class="banner">
+		<div class="layui-row">
+			<div class="layui-col-md2">
+				<div class="banner-logo">
+					<img src="${base}/static/images/wglogo.png"/>
+				</div>
+			</div>
+			<div class="layui-col-md10">
+				<div class="info">
+					<h3 id="title">${workshop.name!}</h3>
+					<p class="sub-title">
+						<b>学段学科：</b><span>小学&gt;语文</span>
+						<b class="_ml20">辅导老师：</b>
+						[@jdao.hql(" from ProjectWorkshopTeacher where projectWorkshop = ? and identity = 'HOST'", [workshop])]
+						<span class="_ml10">
+	                    ${(item.teacher.name)}
+	                    </span>
+						[/@]
+					</p>
+					<p class="desc">
+						<b>简介：</b>
+						<span id="wgDes" class="_color999">${workshop.detail?html}</span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+[/#macro]
+
+[#macro workshop_left_menus workshop]
+<div class="widget">
+	<div class="_header _bd"><span class="_title1">热门分享</span></div>
+	<div class="_body">
+
+	</div>
+</div>
+<div class="widget">
+	<div class="_header _bd"><span class="_title1">工作坊统计</span></div>
+	<div class="_body">
+		<ul class="side-menu">
+			[#global workshopIndex=jcus.workshopIndex(workshop.id!)]
+
+			<li><i></i>通知公告：<span class="layui-badge">${workshopIndex.noticeNum!}</span></li>
+			<li><i></i>班级简报：<span class="layui-badge">${workshopIndex.briefingNum!}</span></li>
+			<li><i></i>资源分享：<span class="layui-badge">${workshopIndex.resourcesNum!}</span></li>
+			<li><i></i>发表话题：<span class="layui-badge">${workshopIndex.topicNum!}</span></li>
+			<li><i></i>发表问答：<span class="layui-badge">${workshopIndex.questionNum!}</span></li>
+			<li><i></i>班级成员：<span class="layui-badge">${workshopIndex.studentNum!}</span></li>
+		</ul>
+	</div>
+</div>
+[/#macro]
+
+[#function avatar teacher size=100]
+[#if jstr.isBlank(teacher.photo)]
+[#return "${base}/static/images/avatar.png"]
+[#else]
+[#assign photo=teacher.photo?eval]
+[#if photo.type=="builtin"]
+[#return "${base}/resource/avatar/${photo.code}/${size}/${size}"]
+[#else]
+[#return "${base}/datas/thumb/PathFile/${photo.id}/${size}/${size}"]
+[/#if]
+[/#if]
+[/#function]

@@ -1,0 +1,34 @@
+[#ftl]
+<div class="main_wrap_index">
+	<div class="wrap">
+		<img alt="" src="${base}/static/images/logo.png" style="margin:50px auto;">
+		<form id="register" name="register"  method="POST" action="${base}/register.bi" autocomplete="off">
+			<input name="option" value="credential" type="hidden">
+			<p class="username">
+				<input id="code" class="register_input" name="code" placeholder="用户名" tabindex="1" type="text">
+			</p>
+			<p class="username">
+				<input id="name" class="register_input" name="name" placeholder="姓名" tabindex="1" type="text">
+			</p>
+			<p class="password">
+				<input id="password" name="password" placeholder="登录密码" tabindex="2" type="password">
+			</p>
+			<p class="confirmPassword">
+				<input id="confirmPassword" name="confirmPassword" placeholder="确认密码" tabindex="2" type="password">
+			</p>
+			[#--
+			<p id="validcode_body">
+				[#include "validateCode.html"]
+			</p>
+			 --]
+			<p class="form_register">
+				<input value="注    册" tabindex="4" type="submit">
+			</p>
+
+			<div class="help">
+				<p>咨询电话：021-51322225</p>
+				<p>咨询邮箱：***********@shutcm.edu.cn</p>
+			</div>
+		</form>
+	</div>
+</div>

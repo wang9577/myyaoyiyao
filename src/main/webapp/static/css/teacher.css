@@ -1,0 +1,54 @@
+@charset "utf-8";
+html,body{
+	height: 100%;
+}
+body{ font-family:"Microsoft Yahei",Tahoma,Arial,Helvetica,STHeiti; font-size:14px;}
+
+._header{
+	background-color: #eeeeee;
+	height: 4em;
+	line-height: 4em;
+	border-bottom: 1px solid #d2d6de;
+}
+
+._logo_title{
+	text-align: center;
+	color:#fff;
+	border-right: 1px solid #d2d6de;
+}
+
+._left_side{
+	background-color: #f9fafc;
+	height:100%;
+	border-right: 1px solid #d2d6de;
+}
+
+._left_side ._menu_item{
+	padding: 10px;
+	text-align: center;
+	border-bottom: 1px solid #d2d6de;
+}
+
+._left_side ._menu_item.cur{
+	background-color: #CAE1FF;
+	
+}
+
+._left_side ._menu_item:hover{
+	background-color: #CAE1FF;
+}
+
+
+._left_side ._menu_item a{
+	color: #666;
+}
+
+
+._main_content{
+	padding: 5px;
+}
+
+table.form{
+	border-collapse:separate; 
+	border-spacing:0px 5px;
+}

@@ -1,0 +1,639 @@
+[#ftl]
+[#macro stu_css]
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/bootstrap/css/bootstrap-theme.min.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="${base}/static/frame/FontAwesomemaster/css/font-awesome.min.css">
+<link rel="stylesheet" href="${base}/static/css/common.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/index.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/bbs.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/course.css" media="all">
+<link rel="stylesheet" href="${base}/static/css/mooc.css" media="all">
+[/#macro]
+
+[#macro stu_js]
+<script src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+<script src="${base}/static/frame/jquery/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="${base}/static/frame/jquery/jquery-validation/dist/additional-methods.min.js"></script>
+<script src="${base}/static/frame/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="${base}/static/frame/layui/layui.all.js" charset="utf-8"></script>
+<script src="${base}/static/frame/echarts/shine.js" charset="utf-8"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.box.js"></script>
+<script type="text/javascript" src="${base}/static/root/js/ustudy.pagesload.js"></script>
+<script src="${base}/static/frame/eschecker/eschecker.js"></script>
+<script src="${base}/static/root/js/browser.js"></script>
+[/#macro]
+
+[#macro wechat_meta]
+<meta name="viewport"
+	content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+[/#macro]
+
+[#macro wechat_css]
+<link href="${base}/static/frame/weui/css/weui.css" rel="stylesheet" type="text/css">
+<link href="${base}/static/frame/weui/css/weuix.css" rel="stylesheet" type="text/css">
+[/#macro]
+
+[#macro wechat_js]
+<script type="text/javascript" src="${base}/static/frame/jquery/core/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/weui/js/zepto.min.js"></script>
+<script type="text/javascript" src="${base}/static/frame/weui/js/zepto.weui.js"></script>
+[/#macro]
+
+[#macro wechat_head title=""]
+
+<head>
+	<title>${title}-上海中医药大学智慧学习</title>
+	[@wechat_meta/]
+	[@wechat_css/]
+	[@wechat_js/]
+	[#nested]
+</head>
+[/#macro]
+
+
+[#macro head title=""]
+<head>
+	<meta charset="utf-8">
+	<title>${title}-上海中医药大学课程中心</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=yes">
+	[@stu_css/]
+	[@stu_js/]
+	[#nested]
+</head>
+[/#macro]
+
+[#macro banner]
+<div id="header" class="_shadow">
+	<div id="inner-header" class="clearfix">
+		<a class="logo" href="${base}/index.htm"><img src="${base}/static/images/logo.png"></a>
+		<div class="header-nav nav-center">
+			<a class="h-nav-item ${(jweb.pathInfo().viewName=='index')?then('current','')}" content="index" href="/">
+				<span class="h-nav-text">首页</span>
+				<span class="h-sub-text">Home</span>
+			</a>
+			<a class="h-nav-item ${(jweb.pathInfo().viewName=='mooc')?then('current','')}"
+				href="${base}/site/course.shtml">
+				<span class="h-nav-text">课程学习</span>
+				<span class="h-sub-text">Course</span>
+			</a>
+			<a class="h-nav-item ${(jweb.pathInfo().viewName=='site')?then('current','')}"
+				href="${base}/site/site.shtml">
+				<span class="h-nav-text">课程网站</span>
+				<span class="h-sub-text">Site</span>
+			</a>
+			[@jdao.hql("from SiteSubject where showTop = true order by sortNum")]
+            	<a class="h-nav-item"
+	                href="${item.url!}" target="_blank">
+	                <span class="h-nav-text">${item.name!}</span>
+	                <span class="h-sub-text">${item.ename!}</span>
+	            </a>
+            [/@]
+			[#--
+			<a class="h-nav-item ${(jweb.pathInfo().viewName=='exam')?then('current','')}"
+				href="${base}/site/exam.shtml">
+				<span class="h-nav-text">题库练习</span>
+				<span class="h-sub-text">Exam</span>
+			</a>
+			<a class="h-nav-item ${(jweb.pathInfo().viewName=='doc')?then('current','')}" href="${base}/site/doc.shtml">
+				<span class="h-nav-text">文库讲义</span>
+				<span class="h-sub-text">Doc</span>
+			</a>
+			--]
+			<a class="h-nav-item ${(jweb.pathInfo().viewName=='study')?then('current','')}" content="school"
+				href="${base}/student/home.shtml" tab="school">
+				<span class="h-nav-text">学习中心</span>
+				<span class="h-sub-text">Study</span>
+			</a>
+		</div>
+		<div class="header-info" style="padding-right: 3%">
+			<div class="user-info">
+				<img src="${base}/static/images/avatar1.png" class="user-header">
+				<span class="substr _color999" title="myk">${jcus.student().name}</span>
+				&nbsp;&nbsp;<a id="modifyPassword" href="javascript:void(0)" class="_color999">[修改密码]</a>
+				[#if jcus.student().code?ends_with("_student")]
+				&nbsp;&nbsp;<a id="tchLogin" href="javascript:void(0)" class="_color999">[教师授课]</a>
+				[/#if]
+				&nbsp;&nbsp;<a id="signout" href="javascript:void(0)" class="_color999">[退出]</a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function () {
+		$("#tchLogin").click(function () {
+			layer.confirm("是否切换到教师身份？", function () {
+				$.post("${base}/login.bi", {}, function (res) {
+					window.location = "${base}" + res.url;
+				});
+			});
+
+		});
+		$("#signout").click(e => {
+			layer.confirm("是否退出系统?", r => {
+				if (r) {
+					$.get("${base}/logout.bi", e => {
+						window.location.href = "${base}/login.htm";
+					});
+				}
+			});
+		});
+		$("#modifyPassword").click(function () {
+			var loadidx = layer.load();
+			$.get("${base}/protected/change_password.shtml", function (h) {
+				var diaidx = layer.open({
+					content: h
+					, type: 1
+					, closeBtn: 0
+					, shadeClose: true
+					, title: "修改密码"
+					, btn: ["提交", "取消"]
+					, yes: function (i, h) {
+						var $form = h.find("form");
+						if (!$form.find("input[name='password']").val()) {
+							layer.msg("请输入原始密码！", { icon: 5 });
+							return false;
+						}
+						if (!$form.find("input[name='newPassword']").val()) {
+							layer.msg("请输入新密码！", { icon: 5 });
+							return false;
+						}
+						var score=box.passwordPower($form.find("input[name='newPassword']").val());
+						if(score<3){
+							layer.msg("密码过于简单，密码必须包含数字、字母，并且长度要大于等于8位！", { icon: 5 });
+							return false;
+						}
+						if ($form.find("input[name='newPassword']").val() != $form.find("input[name='confirmPassword']").val()) {
+							layer.msg("两次输入密码不一致！", { icon: 5 });
+							return false;
+						}
+						var loadidx = layer.load();
+						$.post("${base}/protected/login_user/change_password.bi", $form.serialize(), function (res) {
+							if (res.status) {
+								layer.msg(res.msg, { icon: 6 });
+								layer.close(diaidx)
+							} else {
+								layer.msg(res.msg, { icon: 5 });
+							}
+						}).always(function () {
+							layer.close(loadidx);
+						});
+						return false;
+					}
+				});
+				layer.close(loadidx);
+			});
+		});
+	});
+</script>
+[/#macro]
+
+
+[#macro exam_list]
+<div class="_box">
+	[@jdao.hql(" from ExamTestPlanStudent where student.id = ? and examTestPlan.endExamTime > ? ",[jcus.student().id, jdata.date(.now).time]) var="examPlanStudent"]
+	<div class="alert alert-danger" role="alert">
+		<strong>考试提醒：</strong>
+		<span class="_ml20">${examPlanStudent.examTestPlan.title}</span>
+		<strong class="_ml20">考试时间：</strong>
+		<span class="_ml20">${jdata.date(examPlanStudent.examTestPlan.startExamTime)?string('yyyy-MM-dd HH:mm:ss')}到${jdata.date(examPlanStudent.examTestPlan.endExamTime)?string('yyyy-MM-dd HH:mm:ss')}</span>
+		<span class="_ml20">
+		<a href="javascript:void(0)" Wtarget="_blank" class="btn btn-warning btn-xs startExamTestFromHome" data-id="${examPlanStudent.examTestPlan.id}">进入考试</a></span>
+	</div>
+	<p>考试须知：</p>
+	<p>${(examPlanStudent.examTestPlan.notice)!}</p>
+	[/@]
+</div>
+
+
+
+<script type="text/javascript">
+    $(function(){
+    	$(".startExamTestFromHome").click(function(){
+    		var $this = $(this);
+    		var planId = $this.attr("data-id");
+    		layer.confirm('您确认开始考试吗？请在教师规定的时间内交卷！', {
+    			  btn: ['开始','取消'] //按钮
+    			}, function(){
+    				$.post("${base}/student/exam/paper/getTestPlanToken.bi", {"planId": planId}, function(result){
+    					if(result.status){
+    						var url = "${base}/student/exam/paper/startExamPaperHome.bi?testId=" + result.testId;
+    						layer.closeAll();
+    	    				window.open(url);
+    					}else{
+    						layer.msg(result.msg, {icon: 5});
+    					}
+    				});
+    				
+    			}, function(){
+    				
+    			});
+    	});
+    });
+</script>
+
+[/#macro]
+
+[#function avatar size=100]
+[#if jstr.isBlank(student.photo)]
+[#return "${base}/static/images/avatar.png"]
+[#else]
+[#assign photo=student.photo?eval]
+[#if photo.type=="builtin"]
+[#return "${base}/resource/avatar/${photo.code}/${size}/${size}"]
+[#else]
+[#return "${base}/datas/thumb/PathFile/${photo.id}/${size}/${size}"]
+[/#if]
+[/#if]
+[/#function]
+
+[#function student_avatar student size=100]
+[#if jstr.isBlank(student.photo)]
+[#return "${base}/static/images/avatar.png"]
+[#else]
+[#assign photo=student.photo?eval]
+[#if photo.type=="builtin"]
+[#return "${base}/resource/avatar/${photo.code}/${size}/${size}"]
+[#else]
+[#return "${base}/datas/thumb/PathFile/${photo.id}/${size}/${size}"]
+[/#if]
+[/#if]
+[/#function]
+
+[#macro left_menus]
+[@comm.im /]
+<div class="_box">
+	<div class="_body">
+		<div class="clearfix">
+			<div class="pull-left">
+				<a href="javaScript:void(0)" id="uploadAvatar" title="点击上传头像">
+					<img src="${stu.avatar()}" width="100" class="img-thumbnail">
+				</a>
+			</div>
+			<div class="pull-left _ml10">
+				[#local student=jcus.student()]
+				<p class="_color999 _font12">姓名：${student.name}</p>
+				<p class="_color999 _font12">性别：${(jdata.dict("gender",student.gender).name)!}</p>
+				[#if student.getCollege()??]
+				[#assign cname=student.getCollege().getName()]
+				<p class="_color999 _font12">学院：<span
+						id="college_name">${(cname?length>5)?then(cname[0..5]+"...",cname)}</span></p>
+				<script type="text/javascript">
+					$(function () {
+						$("#college_name").click(function () {
+							layer.tips("${cname}", this);
+						});
+					});
+				</script>
+				[/#if]
+				<p class="_color999 _font12">登录次数：${student.loginCount}</p>
+			</div>
+		</div>
+		<p class="_mb10 _mt20 _font16">教学资源</p>
+		<ul class="list-group">
+			<a href="${base}/student/home.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='home')?then('active','')}">
+				<span class="badge"></span>
+				个人中心
+			</a>
+			<a href="${base}/student/course.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='course')?then('active','')}">
+				<span class="badge"></span>
+				我的课程
+			</a>
+			<a href="${base}/student/exam.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='myexam')?then('active','')}">
+				<span class="badge"></span>
+				我的题库
+			</a>
+			<a href="${base}/student/doc.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='doc')?then('active','')}">
+				我的文库
+			</a>
+		</ul>
+
+		<p class="_mb10 _font16">学习互动</p>
+		<ul class="list-group">
+			<a href="${base}/student/task/task_list.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='task_list')?then('active','')}">
+				<span class="badge"></span>
+				作业任务
+			</a>
+			<a href="${base}/student/bbs/bbs_list.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='bbs_list')?then('active','')}">
+				学习讨论
+			</a>
+			<a href="${base}/student/bbs/qa_list.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='qa_list')?then('active','')}">
+				教师答疑
+			</a>
+
+		</ul>
+
+		<p class="_mb10 _font16">学习记录</p>
+		<ul class="list-group">
+			<a href="${base}/student/study_note_list.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='study_note_list')?then('active','')}">
+				学习笔记
+			</a>
+			<a href="${base}/student/study_record_list.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='study_record_list')?then('active','')}">
+				学习记录
+			</a>
+			<a href="${base}/student/exam/recording/recording_list.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='recording_list')?then('active','')}">
+				题库练习
+			</a>
+			<a href="${base}/student/exam/recording/exam_recording_list.shtml"
+				class="list-group-item ${(jweb.pathInfo().viewName=='exam_recording_list')?then('active','')}">
+				试卷练习
+			</a>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function () {
+		$("#uploadAvatar").click(e => {
+			$.get("${base}/site/avatar.shtml", h => {
+				layer.open({
+					content: h
+					, title: false
+					, area: ["800px", "500px"]
+					, btn: false
+				})
+			});
+		});
+	});
+</script>
+[/#macro]
+
+
+[#macro footer]
+<div class="_footer">
+	<div class="container">
+		<p>
+			上海中医药大学版权所有 电话：021-51322222
+		</p>
+		<p>
+			地址：上海市蔡伦路1200号
+		</p>
+
+	</div>
+</div>
+[/#macro]
+
+
+[#macro course_footer]
+<div class="course_footer">
+	<div>上海中医药大学版权所有 Copyright 2018-2020 shutcm.edu.cn. All Rights Reserved</div>
+</div>
+[/#macro]
+
+[#macro course_new_menus course]
+[@comm.im /]
+<div class="layui-col-md2 _txt_align_center course-left">
+	<img src="${index.course_logo(course,330,180)}" onerror="this.src='${base}/static/images/zwtp.jpg'" width="100%" class="_radius5" />
+	<div class="list-group _mt10">
+		<a href="${base}/student/course/index.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName =='index'] active [/#if]">课程导学</a>
+		<a href="${base}/student/course/notice/notice_list.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName =='notice_list'] active [/#if]">课程通知</a>
+		<a href="${base}/student/course/package.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='package'] active [/#if]">课程课件 </a> 
+		<a href="${base}/student/course/course_files.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='course_files'] active [/#if]">讲义文库 </a> 
+		<a href="${base}/student/course/task/task_list.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='task_list'] active [/#if]">作业任务 </a> 
+		<a href="${base}/student/course/bbs/course_bbs.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='course_bbs'] active [/#if]">学习讨论 </a> 
+		<a href="${base}/student/course/bbs/course_qa.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='course_qa'] active [/#if]">教师答疑 </a>  
+		<a href="${base}/student/course/course_notes.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='course_notes'] active [/#if]">学习笔记 </a> 
+		<a href="${base}/student/course/exam/exam.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='exam'] active [/#if]">题库自测 </a> 
+		<a href="${base}/student/course/test/exam_paper_test.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='exam_paper_test']active[/#if]">在线考试 </a>
+		[#--
+		<a href="${base}/student/course/paper/course_test.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='course_test']active[/#if]">考试测评 </a> 
+		--]
+		<a href="${base}/student/course/ai/study_log.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='study_log']active[/#if]">勤奋日志 </a> 
+		<a href="${base}/student/course/ai/study_percent.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='study_percent'] active[/#if]">学习进度 </a>
+		<a href="${base}/student/course/ai/study_record.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='study_record'] active[/#if]">学习记录 </a> 
+		[#--
+		<a href=" ${base}/student/course/ai/study_score.shtml?course_id=${course.id}" class="list-group-item [#if jweb.pathInfo().viewName=='study_score'] active [/#if]">学情报告 </a> 
+		--]
+	</div>
+</div>
+[/#macro] [#macro course_new_title course] <div class="layui-fluid" style="padding:0;">
+	<div class="layui-row course-header">
+		<div class="layui-col-md2 _txt_align_center">
+			<img src="${base}/static/images/logo.png" width="100%" style="padding:2px;" />
+		</div>
+		<div class="layui-col-md10">
+			<div class="pull-left _ml20">
+				<p class="_font18"><strong>${course.name!}</strong></p>
+				<p class="_color999" style="margin-top:3px;">
+					适用课程：
+					[@jdao.hql("from CourseOnlineCourseRef where courseOnline = ? ", [course.id])]
+					<span class="_ml5 _font12">[${(item.course.code)!}]${(item.course.name)!}</span>
+					[/@]
+				</p>
+			</div>
+
+			<div class="pull-right _mr10">
+				<span class="_color999">AI智能提醒：</span>
+				[#local student=jcus.student()]
+				[@levelColor level=jcus.course.diligence(student,course) label="勤奋度"/]
+				[@levelColor level=jcus.course.activity(student,course) label="活跃度"/]
+				[@levelColor level=jcus.course.scientificality(student,course) label="科学性"/]
+				[#--
+				<span class="label label-default">E</span>
+				<span class="label label-danger">D</span>
+				<span class="label label-warning">C</span>
+				<span class="label label-info">B</span>
+				<span class="label label-success">A</span>
+				--]
+
+			</div>
+			<div class="pull-right _mr10 im_receiver_btn" rid="${course.teacher.id}">
+
+			</div>
+		</div>
+	</div>
+	[/#macro]
+	[#macro levelColor level label]
+
+	<span class="label  [#if level=='A']label-success
+[#elseif level=='B']
+label-info
+[#elseif level=='C']
+label-warning
+[#elseif level=='D']
+label-danger
+[#elseif level=='E']
+label-default
+[/#if] _font14">${label}${level}</span>
+	[/#macro]
+
+	[#macro packagetree treelist contents status=true]
+	
+	<ul class="ulclass">
+		<li>
+			<p class="_chapter">
+				<span>${(treelist.title)!}</span>
+				<span class="pull-right">
+					<i class="layui-icon layui-icon-down"></i>
+				</span>
+			</p>
+			[#if treelist.children??]
+			[#list treelist.children as child]
+			[@stu.packagetree treelist=child contents=contents status=status/]
+			[/#list]
+			[#else]
+			<ul>
+				[#list contents[treelist.id]![] as itm]
+				[#local child=itm.contentObj]
+				<li class="_content">
+					<p class="_item">
+						[#if status]
+						<span
+							class="_ml10 _status [#if itm.result>0]_done[#elseif itm.record>0]_doing[#else]_undo[/#if]"></span>
+						[/#if]
+						<span class="_ml10">${child.name}</span>
+						<span class="pull-right">
+							<cite class="_color999">${child.getStudyTimeFmt()}</cite>
+							[#if child.contentType=="1"]
+							<a href="javaScript:void(0)"
+								path="${base}/student/course/content_video_body.shtml?content_id=${child.id}"
+								class="_ml10 ContentPlay" type="2" skin="layui-layer-player" title="${child.name}"
+								data="${child.id}"><i class="layui-icon layui-icon-play"></i></a>
+							[#elseif child.contentType=="3"]
+							[#assign ext=child.body?substring(child.body?last_index_of(".")+1)]
+							[#if ext=="pdf"]
+							<a href="javaScript:void(0)" [#-- path="${base}/upload/${child.publicBody}" --]
+								path="${base}/student/course/content_document_body.shtml?content_id=${child.id}"
+								type="1" class="_ml10 ContentPlay" skin="layui-layer-molv" title="${child.name}"
+								data="${child.id}"><i class="layui-icon layui-icon-file"></i></a>
+							[#else ]
+							<a href="javaScript:void(0)"
+								path="${base}/student/course/content_document_body.shtml?content_id=${child.id}"
+								type="1" class="_ml10 ContentPlay" skin="layui-layer-molv" title="${child.name}"
+								data="${child.id}"><i class="layui-icon layui-icon-file"></i></a>
+							[/#if]
+							[#elseif child.contentType=="2"]
+							<a href="javaScript:void(0)"
+								path="${base}/student/course/content_html_body.shtml?content_id=${child.id}" type="2"
+								class="_ml10 ContentPlay" skin="layui-layer-lan" title="${child.name}"
+								data="${child.id}"><i class="layui-icon layui-icon-read"></i></a>
+							[/#if]
+						</span>
+					</p>
+				</li>
+				[/#list]
+			</ul>
+			[/#if]
+		</li>
+	</ul>
+	[/#macro]
+
+	[#macro packagetree_view treelist contents status=true]
+	<ul class="ulclass">
+		<li>
+			<p class="_chapter">
+				<span>${(treelist.title)!}</span>
+				<span class="pull-right">
+					<i class="layui-icon layui-icon-down"></i>
+				</span>
+			</p>
+			[#if treelist.children??]
+			[#list treelist.children as child]
+			[@stu.packagetree_view treelist=child contents=contents status=status/]
+			[/#list]
+			[#else]
+			<ul>
+				[#list contents[treelist.id]![] as itm]
+				[#local child=itm.contentObj]
+				<li>
+					<p class="_item">
+						[#if status]
+						<span
+							class="_ml10 _status [#if itm.result>0]_done[#elseif itm.record>0]_doing[#else]_undo[/#if]"></span>
+						[/#if]
+
+						<span class="_ml10">
+							[#if child.contentType=="1"]
+							[视频]
+							[#elseif child.contentType=="3"]
+							[#assign ext=child.body?substring(child.body?last_index_of(".")+1)]
+							[#if ext=="pdf"]
+							[文档]
+							[#else ]
+							<[视频] [/#if] [#elseif child.contentType=="2" ] [网页] [/#if] </span> <span class="_ml10">
+								${child.name}
+						</span>
+
+						<span class="pull-right">
+							<cite class="_color999">${child.getStudyTimeFmt()}</cite>
+						</span>
+					</p>
+				</li>
+				[/#list]
+			</ul>
+			[/#if]
+		</li>
+	</ul>
+	[/#macro]
+
+	[#macro content_percent treelist contents status=true]
+	<ul class="ulclass">
+		<li>
+			<p class="_item">
+				<span>${(treelist.title)!}</span>
+				<span class="pull-right">
+
+				</span>
+			</p>
+			[#if treelist.children??]
+			[#list treelist.children as child]
+			[@stu.content_percent treelist=child contents=contents status=status/]
+			[/#list]
+			[#else]
+			<ul>
+				[#list contents[treelist.id]![] as itm]
+				[#local child=itm.contentObj]
+				<li>
+					<div class="_item">
+						[#if status]
+						<span
+							class="_ml10 _status [#if itm.result>0]_done[#elseif itm.record>0]_doing[#else]_undo[/#if]"></span>
+						[/#if]
+						<span class="_ml10">${child.name}</span>
+						<div class="pull-right" style="width:500px;">
+							<div class="_flex">
+								<div style="width:350px;">
+									<div class="layui-progress _mt5">
+										[#if ((itm.record!0) / 1000) gte (child.studyTime!1)]
+										[#assign progress = 100]
+										[#else]
+										[#assign progress = itm.record / 1000 / child.studyTime * 100]
+										[/#if]
+										<div class="layui-progress-bar" lay-percent="${progress}%"
+											style="width: ${progress}%;"></div>
+									</div>
+								</div>
+								<div class="_ml10">
+									<cite
+										class="_green">${(itm.record/1000/3600)?int?string("00")}:${(((itm.record/1000)%3600)/60)?int?string("00")}:${((itm.record/1000)%60)?int?string("00")}</cite>
+									<cite class="_color999">/</cite>
+									<cite class="_red">${child.getStudyTimeFmt()}</cite>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</li>
+				[/#list]
+			</ul>
+			[/#if]
+		</li>
+	</ul>
+	[/#macro]

@@ -1,0 +1,362 @@
+@charset "utf-8";
+html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,blockquote,pre,hr,figure,table,caption,th,td,form,fieldset,legend,input,button,textarea,menu{ margin:0; padding:0; }
+header,footer,section,article,aside,nav,hgroup,address,figure,figcaption,menu,details{ display:block; }
+table{ border-collapse:collapse; border-spacing:0; }
+caption,th{ text-align:left; font-weight:normal; }
+html,body,fieldset,img,iframe,abbr{ border:0;}
+img{vertical-align:top;}
+html{ overflow-x:hidden; }
+i,cite,em,var,address,dfn{ font-style:normal; }
+[hidefocus],summary{ outline:0; }
+li{ list-style:none; }
+h1,h2,h3,h4,h5,h6,small{ font-size:100%; }
+sup,sub{ font-size:83%; }
+pre,code,kbd,samp{ font-family:inherit; }
+q:before,q:after{ content:none; }
+textarea{ overflow:auto; resize:none; }
+label,summary{ cursor:default; }
+a,button{ cursor:pointer; }
+input{border: 0; outline: none}
+.none { display: none;}
+.clear { width:100%; height:0; line-height:0; font-size:0; overflow:hidden; clear:both; display:block; _display:inline; }
+.clearfix:after{clear: both;content: ".";display: block;height:0;visibility: hidden;}
+.clearfix{ display: block; *zoom:1; }
+body {
+    font-family:"微软雅黑";
+    background-color: #f5f0f1;
+}
+.head {
+    height: 136px;
+    background: #a41f34 url("../m/logo.png") no-repeat center;
+}
+
+.container {
+	padding-top:20px;
+	padding-bottom: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size:34px;
+    font-weight:bold;
+    color: #a41f34;
+    padding-bottom: 20px;
+}
+.login-content {
+    width: 558px;
+    margin: 0 auto;
+    border-radius: 1px;
+    border: 1px solid #e5e0e0;
+    background: #fff;
+}
+.login-title {
+    text-align: center;
+    color: #999999;
+    font-size: 20px;
+    word-spacing: 5px;
+    border-bottom: 1px solid #e5e0e0;
+    padding: 0 69px;
+}
+.login-title .tit {
+    float: left;
+    width: 50%;
+    line-height:54px;
+    cursor: pointer;
+}
+.login-title .tit-33 {
+    float: left;
+    width: 33.3%;
+    line-height:54px;
+    cursor: pointer;
+}
+.login-title .tit.current {
+    color: #a41f34;
+    border-bottom: 3px solid #a41f34;
+    margin-bottom: -2px;
+}
+
+.login-title .tit-33.current {
+    color: #a41f34;
+    border-bottom: 3px solid #a41f34;
+    margin-bottom: -2px;
+}
+.login-log {
+    vertical-align: middle;
+    display: inline-block;
+    *display:inline;
+    *zoom:1;
+    vertical-align:middle;
+}
+
+.login-infos {
+    padding: 13px 69px 0 ;
+}
+
+.login-info {
+    margin-bottom: 10px;
+    padding: 0 10px 0 38px;
+    border-radius: 1px;
+}
+.username, .password {
+    border: 1px solid #e5e0e0;
+    background: #fff url("../images/m/icons1.png") no-repeat left top;
+}
+.password {
+    background-position:  left center;
+}
+.login-info input, .btn-login {
+    width: 100%;
+    display: block;
+    height: 38px;
+    line-height: 38px;
+    font-size: 14px;
+}
+.login-code {
+    padding: 0 0 0 38px;
+    margin-bottom: 0px;
+    border: 1px solid #e5e0e0;
+    background: #fff url("../images/m/icons1.png") no-repeat left bottom;
+}
+.login-code input {
+    display: inline-block;
+    *display:inline;
+    *zoom:1;
+    vertical-align:middle;
+    width: 249px;
+    border-radius: 5px;
+    float: left;
+}
+
+.codepic {
+    vertical-align: top;
+    display: inline-block;
+    *display:inline;
+    *zoom:1;
+    vertical-align:middle;
+    height: 30px;
+    margin-top: 4px;
+    float: right;
+    margin-right: 4px;
+}
+.login-tip {
+    height: 40px;
+    line-height:40px;
+    font-size:13px;
+}
+.login-tip .rempass {
+    float: left;
+    color: #999999;
+}
+.login-tip .forpass a{
+    float: right;
+    color: #a41f34;
+    cursor: pointer;
+}
+.login-btn{
+    padding:0;
+    background-color: #0085bd;
+    margin-bottom: 10px;
+}
+.login-btn .btn-login{
+    width: 100%;
+    border-radius: 5px;
+}
+.login-info .btn-login {
+    background-color: #a41f34;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    line-height:40px;
+}
+.login-inst {
+    line-height: 24px;
+    font-size:13px;
+    color: #a41f34;
+}
+.ewm {
+    text-align: center;
+}
+.foot {
+    background-color: #a41f34;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    line-height: 24px;
+    padding:21px 0;
+}
+.passback {
+    width: 1138px;
+    height: 598px;
+    background-color: #fff;
+    border: 1px solid #e5e0e0;
+    margin:0 auto;
+}
+.passback .backtitle{
+    text-align: center;
+    font-size:30px;
+    color: #a41f34;line-height: 75px;
+    border-bottom: 1px solid #e5e0e0;
+}
+.passback .passback-con {
+    padding-top: 50px;
+    width: 420px;
+    margin: 0 auto;
+}
+.passback .passback-item {
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 16px;
+    font-size:14px;
+    color: #333333;
+}
+.passback .passback-item div{
+    display: inline-block;
+    line-height: 40px;
+    *display:inline;
+    *zoom:1;
+    vertical-align:middle;
+}
+.passback .passback-tip {
+    text-align: right;
+    width: 83px;
+    padding-right: 10px;
+}
+.passback .passback-tip i {
+    color: #ce0c0c;
+}
+.passback-info {
+    width: 305px;
+    border:1px solid #dbdbdb;
+    padding-left: 15px;
+}
+.passback-info input[type=text] {
+    display: block;
+    width: 100%;
+    height:38px;
+    line-height: 38px;
+}
+.passback .button {
+    padding-top: 24px;
+    height: 40px;
+}
+.passback .button div{
+    float: left;
+    width: 200px;
+    text-align: center;
+    color: #fff;
+    background-color: #a41f34;
+    line-height:40px;
+    font-size:16px;
+    cursor: pointer;
+}
+.passback .button .cancel {
+    float: right;
+    background-color: #9d9b9b;
+}
+.newpass .newpass-con {
+    padding-top: 112px;
+    width: 420px;
+    margin: 0 auto;
+}
+.newpass .button div{
+    float: none;
+    width: 100%;
+}
+
+@media screen and (max-width: 550px) {
+    .head {
+        height: 110px;
+        background: url("../images/m/logo-m.png") center;
+        background-size: cover;
+    }
+    .title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #a41f34;
+        padding-bottom: 18px;
+    }
+    .login-content {
+        width: auto;
+        margin: 0 10px;
+    }
+    .login-title {
+        font-size: 18px;
+        padding: 0 25px;
+    }
+    .login-infos {
+        padding: 15px 25px 0;
+    }
+    .login-code input {
+        width: calc(100% - 100px);
+    }
+    .login-inst {
+        text-align: left;
+    }
+    .foot {
+        padding: 20px 15px;
+    }
+    .passback {
+        width: auto;
+        height: 445px;
+        margin: 0 10px;
+    }
+    .passback .button {
+        padding-top: 12px;
+    }
+    .passback .button div {
+        width: 45%;
+    }
+    .newpass {
+        width: auto;
+        height: 350px;
+        margin: 0 10px;
+    }
+    .passback .backtitle {
+        font-size: 18px;
+        line-height: 55px;
+    }
+    .passback .passback-con {
+        padding-top: 35px;
+        width: auto;
+        margin: 0 15px;
+    }
+    .passback .newpass-con {
+        padding-top: 55px;
+        width: auto;
+        margin: 0 15px;
+    }
+    .passback-info {
+        width: calc(100% - 115px);
+    }
+
+    .remark{
+        color:#a41f34;
+        width: 86.8%;
+        text-align: left;
+        padding: 15px 25px 0;
+        line-height: 25px;
+        margin-top: 5px;
+        display: inline-block;
+        font-size:13px;
+    }
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: gray;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: gray;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: gray;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: gray;
+}
+
+.remark_text {
+	padding:10px;
+}

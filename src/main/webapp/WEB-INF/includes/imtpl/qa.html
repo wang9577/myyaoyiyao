@@ -1,0 +1,9 @@
+[#ftl]
+[#if bots?size>0]
+为您找到相关问题：<br/>
+[#list bots as bot]
+<a target='_blank' class="_color999 _mt5" href="/qa_${bot['classify.id']}/info_${bot.id}.htm">${bot_index + 1}、${bot.question}</a><br/>
+[/#list]
+[#else]
+没有找到任何相关内容，请您重新输入！
+[/#if]

@@ -1,0 +1,130 @@
+.bbs_head {
+	padding: 12px 30px;
+	border-bottom: 1px #ececec solid;
+
+}
+.bbs_head span {
+	margin: 0 10px 0 0;
+	line-height: 30px;
+	display: inline-block;
+}
+
+.bbs_head span span {
+	margin-left: 10px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.bbs_head .txt1 {
+	color: #4ba9e6;
+}
+
+.bbs_head .search {
+	float: right;
+	width: 250px;
+	position: relative;
+	z-index: 10;
+}
+
+.searchIn {
+	background: #f8f8f8 url(../images/answer.png) -180px -499px no-repeat;
+}
+
+.searchIn {
+	width: 255px;
+	height: 28px;
+	border: 1px #ececec solid;
+	padding: 0 0 0 10px;
+}
+
+.searchIn .s_input {
+	float: left;
+	width: 205px;
+	height: 28px;
+	line-height: 28px;
+}
+
+.searchIn input {
+	border: none;
+	background: none;
+	outline: none;
+}
+
+.searchIn .s_submit {
+	float: right;
+	width: 35px;
+	height: 28px;
+	cursor: pointer;
+}
+
+.bbs_item {
+	position: relative;
+	padding: 15px;
+	border-bottom: 1px #ececec solid;
+}
+
+.bbs_item  .sign {
+	position: absolute;
+	width: 124px;
+	top: 5px;
+	right: 60px;
+	z-index: 1;
+}
+
+.bbs_item  .bbs_left {
+	float: left;
+	width: 100px;
+	text-align: center;
+}
+
+.bbs_item .bbs_right {
+	float: left;
+	width: 80%;
+	padding-left: 20px;
+	position: relative;
+	z-index: 2;
+	border-left: 1px #ececec solid;
+}
+
+.bbs_item .stu_name {
+	color: #4ba9e6;
+}
+
+.bbs_item .bbs_title {
+	min-height: 73px;
+}
+
+.bbs_item .bbs_title a {
+	font-size: 16px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	color: #666;
+}
+
+.bbs_item .bbs_info {
+	height: 22px;
+	line-height: 22px;
+}
+
+.bbs_item .bbs_info span {
+	font-size: 12px;
+	float: right;
+	line-height: 22px;
+	margin: 0 20px 0 0;
+	color:#999;
+}
+.bbs_item .bbs_info span.line {
+	color: #e6e6e6;
+	margin: 0 10px 0 0;
+}
+.bbs_item .bbs_info a {
+	color: #4ba9e6;
+}
+
+/* .bbs_reply{
+	width:98%;
+	background-color:#f3f3f3;
+	padding:10px;
+	margin-top:10px;
+} */
